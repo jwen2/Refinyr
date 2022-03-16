@@ -11,19 +11,17 @@ app.config['UPLOAD_PATH'] = '../csv'
 def load():
     return 'hello'
 
-@app.route('/uploader', methods = ['GET', 'POST'])
+@app.route('/uploader', methods = ['POST'])
 def upload_file():
-    if request.method == 'POST':
-        uploaded_file = request.files['file']
-        filename = uploaded_file.filename
-        if filename != '':
-            file_ext = os.path.splitext(filename)[1]
-            if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-                abort(400)
-            uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
-            return "saved"
-    else:
-        return 'get request'
+    uploaded_file = request.files['file']
+    filename = uploaded_file.filename
+    if filename != '':
+        file_ext = os.path.splitext(filename)[1]
+        if file_ext not in app.config['UPLOAD_EXTENSIONS']:
+            return "Not a csv", 400
+        uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+        return "Saved", 204
+    return "No file attached", 400
 
 @app.route("/downloader/<file_name>")
 def get_image(file_name):
@@ -32,6 +30,9 @@ def get_image(file_name):
     except FileNotFoundError:
         abort(404)        
         
+@app.errorhandler(413)
+def too_large(e):
+    return "File is too large", 413
 
 def isNullAny(df):
     return df.isnull().any()
