@@ -1,6 +1,7 @@
 from flask import Flask, request, abort, send_from_directory
 import os
 import pandas_func
+import database_func
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
@@ -8,9 +9,9 @@ app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 100
 
-@app.route('/api/load')
-def load():
-    return 'hello'
+@app.route('/api/init_db')
+def init_db():
+    return database_func.init_tables()
 
 @app.route('/uploader', methods = ['POST'])
 def upload_file():
