@@ -18,7 +18,7 @@ def init_tables():
     cursor = mydb.cursor()
     cursor.execute("DROP TABLE IF EXISTS files")
     cursor.execute("DROP TABLE IF EXISTS files_version")
-    cursor.execute("CREATE TABLE IF NOT EXISTS files (file_name VARCHAR(255), PRIMARY KEY (file_name), version INTEGER)")
-    cursor.execute("CREATE TABLE IF NOT EXISTS files_version (file_name VARCHAR(255), FOREIGN KEY (file_name) REFERENCES files (file_name), version INTEGER, function_applied VARCHAR(255))")
+    cursor.execute("CREATE TABLE IF NOT EXISTS files (file_id INTEGER, file_name VARCHAR(255), version INTEGER, PRIMARY KEY (id))")
+    cursor.execute("CREATE TABLE IF NOT EXISTS files_version (file_version_id INTEGER, file_name VARCHAR(255), FOREIGN KEY (file_name) REFERENCES files (file_name), version INTEGER, function_applied VARCHAR(255))")
     cursor.close()
     return 'init db'
