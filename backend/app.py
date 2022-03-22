@@ -22,6 +22,7 @@ def upload_file():
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             return "Not a csv", 400
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+        database_func.insert_file(filename)
         return "Saved", 200
     return "No file attached", 400
 
