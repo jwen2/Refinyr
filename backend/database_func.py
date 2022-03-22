@@ -24,18 +24,21 @@ insert_file = ("INSERT INTO files "
               "VALUES (%s, %d)")
 
 insert_file_version = ("INSERT INTO files_version"
-                      "(file_name)"  
-)
+                      "(file_id, file_version, function)"  
+                      "VALUES (SELECT(file_id FROM files WHERE file_name = %s), %d, %s)")
 
-def insert_file(file_data):
+def insert_file(file_name):
     mydb = mysql.connector.connect(
         host="mysqldb",
         user="root",
         password="p@ssw0rd1",
         database="PANDAS_UI"
     )
+    file_data = (file_name, 1)
+    file_version_data = (file_name, 1, 'INIT')
     cursor = mydb.cursor()
     cursor.execute(insert_file, file_data)
+    cursor.execute(insert_file_version, file_version_data)
     mydb.commit()
     cursor.close()
     mydb.close()
