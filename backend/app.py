@@ -1,11 +1,12 @@
 from flask import Flask, request, abort, send_from_directory
-import pandas as pd
 import os
+import pandas_func
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'
+app.config['MAX_HEADER_ROWS'] = 100
 
 @app.route('/api/load')
 def load():
@@ -20,7 +21,7 @@ def upload_file():
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             return "Not a csv", 400
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
-        return "Saved", 204
+        return "Saved", 200
     return "No file attached", 400
 
 @app.route("/downloader/<file_name>")
@@ -30,18 +31,26 @@ def get_image(file_name):
     except FileNotFoundError:
         abort(404)        
         
+@app.route('/pandas/head/<string:file_name>/<int:n>')
+def get_head(file_name, n):
+    return head_or_tail(file_name, 'head', n)
+
+@app.route('/pandas/tail/<string:file_name>/<int:n>')
+def get_tail(file_name, n):
+    return head_or_tail(file_name, 'tail', n)
+
+def head_or_tail(file_name, direction, n):
+    if n > app.config['MAX_HEADER_ROWS']:
+        return 'Exceeds max configured records' , 404
+    try:
+        json = pandas_func.view_dataframe(app.config['UPLOAD_PATH'], file_name, direction, n)
+        return json, 200
+    except FileNotFoundError:
+        return 'File not found ' + file_name, 404     
+
 @app.errorhandler(413)
 def too_large(e):
     return "File is too large", 413
-
-def isNullAny(df):
-    return df.isnull().any()
-
-def isNullColumn(columnName, df):
-    return df[columnName].isnull()
-
-def removeNullsFromDF(df):
-    return df.dropna()
 
 if __name__ == "__main__":
     app.run()         
