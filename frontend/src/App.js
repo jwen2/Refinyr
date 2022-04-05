@@ -47,6 +47,7 @@ export default function App() {
    return (
      <div className="App">
        <h1 className="styling">Low Fidelity CSV Utility</h1>
+       <h1 className="stylingh2">Transform your data with us.</h1>
        <form>
          <input
            type={"file"}
