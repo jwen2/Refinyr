@@ -28,6 +28,7 @@ def replace_na_stat(path, file_name, column_name, stat):
         df[column_name].fillna(value=df[column_name].median(), inplace=True)
     return json.dumps(json.loads(df.to_json(orient='records')))    
 
+#<<<<< Methods implemented up to here
 #not working right :D
 def normalize_column(path, file_name, column_name):
     df = pd.read_csv(os.path.join(path, file_name))

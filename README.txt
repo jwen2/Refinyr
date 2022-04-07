@@ -2,6 +2,9 @@ To run backend install docker, from the directory with the docker-compose file r
     
     docker-compose -f docker-compose.dev.yml up --build
 
+To run locally:
+    python3 -m flask run --host=0.0.0.0
+
 To test the api run:
     
     curl localhost:8000/api/load
