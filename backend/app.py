@@ -59,15 +59,25 @@ def remove_na(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
-
-#TODO
-@app.route('/pandas/rm/na_stat/<string:file_name>/<string:column_name>/<string:stat>')
-def remove_na_stat(file_name, column_name, stat):
+@app.route('/pandas/replace/na_mean/<string:file_name>/<string:column_name>')
+def replace_na_mean(file_name, column_name):
     try:
-        json = pandas_func.remove_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, stat)
+        json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'mean')
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404 
+
+@app.route('/pandas/replace/na_median/<string:file_name>/<string:column_name>')
+def replace_na_median(file_name, column_name):
+    try:
+        json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404 
 
 @app.errorhandler(413)
 def too_large(e):
