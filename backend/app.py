@@ -79,6 +79,20 @@ def replace_na_median(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
+@app.route('/export/<string:file_name>/<string:column_name>')
+def export(file_name, column_name):
+    print('hi')
+    json = None
+    try:
+        json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
+        pandas_func.export(json)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404  
+    
+
 @app.errorhandler(413)
 def too_large(e):
     return "\nFile is too large", 413

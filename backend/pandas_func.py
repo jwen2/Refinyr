@@ -28,6 +28,11 @@ def replace_na_stat(path, file_name, column_name, stat):
         df[column_name].fillna(value=df[column_name].median(), inplace=True)
     return json.dumps(json.loads(df.to_json(orient='records')))    
 
+def export(jsonString):
+    df = pd.read_json(jsonString)
+    print(df)
+    df.to_csv("export.csv")
+
 #<<<<< Methods implemented up to here
 #not working right :D
 def normalize_column(path, file_name, column_name):
