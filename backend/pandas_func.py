@@ -30,8 +30,7 @@ def replace_na_stat(path, file_name, column_name, stat):
 
 def export(jsonString):
     df = pd.read_json(jsonString)
-    print(df)
-    df.to_csv("export.csv")
+    df.to_csv("../csv/export.csv")
 
 #<<<<< Methods implemented up to here
 #not working right :D

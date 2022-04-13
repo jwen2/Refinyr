@@ -8,6 +8,8 @@ app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 100
 
+global globalVariable
+
 @app.route('/hello')
 def load():
     return '\n hello'
@@ -43,6 +45,7 @@ def get_tail(file_name, n):
 def remove_duplicates(file_name, column_name):
     try: 
         json = pandas_func.remove_duplicates(app.config['UPLOAD_PATH'], file_name, column_name)
+        pandas_func.export(json)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -53,6 +56,7 @@ def remove_duplicates(file_name, column_name):
 def remove_na(file_name, column_name):
     try: 
         json = pandas_func.remove_na(app.config['UPLOAD_PATH'], file_name, column_name)
+        pandas_func.export(json)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -63,6 +67,7 @@ def remove_na(file_name, column_name):
 def replace_na_mean(file_name, column_name):
     try:
         json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'mean')
+        pandas_func.export(json)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -73,25 +78,23 @@ def replace_na_mean(file_name, column_name):
 def replace_na_median(file_name, column_name):
     try:
         json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
+        pandas_func.export(json)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
-@app.route('/export/<string:file_name>/<string:column_name>')
-def export(file_name, column_name):
-    print('hi')
-    json = None
-    try:
-        json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
-        pandas_func.export(json)
-        return json, 200
-    except KeyError:
-        return "\n Invalid column name.", 404
-    except FileNotFoundError:
-        return '\n File not found ' + file_name, 404  
-    
+# @app.route('/export/<string:file_name>/<string:column_name>')
+# def export(file_name, column_name):
+#     try:
+#         json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
+#         pandas_func.export(json)
+#         return json, 200
+#     except KeyError:
+#         return "\n Invalid column name.", 404
+#     except FileNotFoundError:
+#         return '\n File not found ' + file_name, 404  
 
 @app.errorhandler(413)
 def too_large(e):
