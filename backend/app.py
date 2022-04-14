@@ -8,7 +8,6 @@ app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 100
 
-global globalVariable
 
 @app.route('/hello')
 def load():
@@ -41,7 +40,7 @@ def get_head(file_name, n):
 def get_tail(file_name, n):
     return head_or_tail(file_name, 'tail', n)
 
-@app.route('/pandas/rm/dups/<string:file_name>/<string:column_name>')
+@app.route('/pandas/rm_dups/<string:file_name>/<string:column_name>')
 def remove_duplicates(file_name, column_name):
     try: 
         json = pandas_func.remove_duplicates(app.config['UPLOAD_PATH'], file_name, column_name)
@@ -52,10 +51,20 @@ def remove_duplicates(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
-@app.route('/pandas/rm/na/<string:file_name>/<string:column_name>')
-def remove_na(file_name, column_name):
+@app.route('/pandas/get_dummies/<string:file_name>/<string:column_name>')
+def get_dummies(file_name, column_name):
+    try:
+        json = pandas_func.getDummies(app.config['UPLOAD_PATH'], file_name, column_name)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/rm_nulls/<string:file_name>/<string:column_name>')
+def remove_nulls(file_name, column_name):
     try: 
-        json = pandas_func.remove_na(app.config['UPLOAD_PATH'], file_name, column_name)
+        json = pandas_func.remove_nulls(app.config['UPLOAD_PATH'], file_name, column_name)
         pandas_func.export(json)
         return json, 200
     except KeyError:
@@ -66,7 +75,7 @@ def remove_na(file_name, column_name):
 @app.route('/pandas/replace/na_mean/<string:file_name>/<string:column_name>')
 def replace_na_mean(file_name, column_name):
     try:
-        json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'mean')
+        json = pandas_func.replace_na_numeric(app.config['UPLOAD_PATH'], file_name, column_name, 'mean')
         pandas_func.export(json)
         return json, 200
     except KeyError:
@@ -77,7 +86,7 @@ def replace_na_mean(file_name, column_name):
 @app.route('/pandas/replace/na_median/<string:file_name>/<string:column_name>')
 def replace_na_median(file_name, column_name):
     try:
-        json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
+        json = pandas_func.replace_na_numeric(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
         pandas_func.export(json)
         return json, 200
     except KeyError:
@@ -85,17 +94,80 @@ def replace_na_median(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
-# @app.route('/export/<string:file_name>/<string:column_name>')
-# def export(file_name, column_name):
-#     try:
-#         json = pandas_func.replace_na_stat(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
-#         pandas_func.export(json)
-#         return json, 200
-#     except KeyError:
-#         return "\n Invalid column name.", 404
-#     except FileNotFoundError:
-#         return '\n File not found ' + file_name, 404  
+@app.route('/pandas/replace/na_mode_numeric/<string:file_name>/<string:column_name>')
+def replace_na_mode_numeric(file_name, column_name):
+    try:
+        json = pandas_func.replace_na_numeric(app.config['UPLOAD_PATH'], file_name, column_name, 'mode')
+        pandas_func.export(json)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404 
 
+@app.route('/pandas/replace/na_unknown/<string:file_name>/<string:column_name>')
+def replace_na_unknown(file_name, column_name):
+    try:
+        json = pandas_func.replace_na_categorical(app.config['UPLOAD_PATH'], file_name, column_name, 'unknown')
+        pandas_func.export(json)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404         
+
+@app.route('/pandas/replace/na_ffill/<string:file_name>/<string:column_name>')
+def replace_na_ffill(file_name, column_name):
+    try:
+        json = pandas_func.replace_na_categorical(app.config['UPLOAD_PATH'], file_name, column_name, 'ffill')
+        pandas_func.export(json)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404     
+
+@app.route('/pandas/replace/na_bfill/<string:file_name>/<string:column_name>')
+def replace_na_bfill(file_name, column_name):
+    try:
+        json = pandas_func.replace_na_categorical(app.config['UPLOAD_PATH'], file_name, column_name, 'bfill')
+        pandas_func.export(json)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404     
+
+@app.route('/pandas/replace/na_mode_categorical/<string:file_name>/<string:column_name>')
+def replace_na_mode_categorical(file_name, column_name):
+    try:
+        json = pandas_func.replace_na_categorical(app.config['UPLOAD_PATH'], file_name, column_name, 'mode')
+        pandas_func.export(json)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404     
+
+@app.route('/pandas/rename_column/<string:file_name>/<string:old_column>/to/<string:new_column>')
+def rename_column(file_name, old_column_name, new_column_name):
+    try:
+        json = pandas_func.rename(app.config['UPLOAD_PATH'], file_name, old_column_name, new_column_name)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('pandas/normalize/<string:file_name>/<string:column_name')
+def normalize(file_name, column_name):
+    try:
+        json = pandas_func.normalize(app.config['UPLOAD_PATH'], file_name, column_name)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
 @app.errorhandler(413)
 def too_large(e):
     return "\nFile is too large", 413
