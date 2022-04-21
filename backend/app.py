@@ -168,6 +168,7 @@ def normalize(file_name, column_name):
         return "\n Invalid column name.", 404
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
+
 @app.errorhandler(413)
 def too_large(e):
     return "\nFile is too large", 413
@@ -183,3 +184,21 @@ def head_or_tail(file_name, direction, n):
         return '\n' + json, 200
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404     
+
+# structure of steps would be linkedlist of lists 
+# [[function, <Optional> param1, <Optional> param2....], ....]
+# [ [rename_column, old_column_name, new_column_name], [normalize, column_name] .... ]
+# currently we have up to 2 parameters max
+# The parameters must be in order
+def invokeSteps(listOfSteps, file_name):
+    for step in listOfSteps:
+        functionName = step[0]
+        if (step.len() == 2):
+            paramOne = step[1]
+            locals()[functionName](file_name, paramOne)
+        if (step.len() == 3):
+            paramOne = step[1]
+            paramTwo = step[2]
+            locals()[functionName](file_name, paramOne, paramTwo)
+        else:
+            locals()[functionName](file_name)
