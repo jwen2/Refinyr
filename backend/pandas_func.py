@@ -40,6 +40,8 @@ def view_dataframe(path, file_name, direction, n):
 
 #ruh-roh
 
+
+
 """Transform categorical variable column into mulitple binary predictors"""
 
 
@@ -72,8 +74,8 @@ def remove_nulls(df,col_name):
 
 
 """Rename column name into new column name"""
-def rename (df, old_name, new_name):
-    df.rename(columns = {old_name:new_name}, inplace = True)
+def rename (df, col_name, new_name):
+    df.rename(columns = {col_name:new_name}, inplace = True)
     return(df)
 
 """This function should only be used for numeric columns. Replace Na stat with mean median or mode can later add regressions and fancy stuff as well to here. Probably call another function"""
