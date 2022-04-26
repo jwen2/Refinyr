@@ -3,8 +3,7 @@ import pandas as pd
 import json
 import os
 
-def view_dataframe(path, file_name, direction, n):
-    df = pd.read_csv(os.path.join(path, file_name))
+def view_dataframe(df, direction, n):
     if direction == 'head':
         json_string = df.head(n).to_json(orient='records')
     else:

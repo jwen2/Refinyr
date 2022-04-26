@@ -1,13 +1,25 @@
 from flask import Flask, request, abort, send_from_directory
 import os
 import pandas_func
-import file_history
+import datastore
+import pandas as pd
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 100
+
+@app.before_request
+def before_request():
+    app.logger.debug('before_request')
+    datastore.get_datastore()
+
+@app.after_request
+def after_request(response):
+    datastore.close_datastore()
+    app.logger.debug('after_request')
+    return response
 
 @app.route('/hello')
 def load():
@@ -22,6 +34,7 @@ def upload_file():
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             return "\n Not a csv", 400
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+        datastore.store_df(filename, pd.read_csv(os.path.join(app.config['UPLOAD_PATH'], filename)))
         return "\n Saved", 200
     return "\n No file attached", 400
 
@@ -45,7 +58,7 @@ def remove_duplicates(file_name, column_name):
     try: 
         json = pandas_func.remove_duplicates(app.config['UPLOAD_PATH'], file_name, column_name)
         pandas_func.export(json)
-        file_history.lpush(file_name, 'remove_duplicates:' + column_name)
+        datastore.lpush(file_name, 'remove_duplicates:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -67,7 +80,7 @@ def remove_nulls(file_name, column_name):
     try: 
         json = pandas_func.remove_nulls(app.config['UPLOAD_PATH'], file_name, column_name)
         pandas_func.export(json)
-        file_history.lpush(file_name, 'remove_nulls:' + column_name)
+        datastore.lpush(file_name, 'remove_nulls:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -79,7 +92,7 @@ def replace_na_mean(file_name, column_name):
     try:
         json = pandas_func.replace_na_numeric(app.config['UPLOAD_PATH'], file_name, column_name, 'mean')
         pandas_func.export(json)
-        file_history.lpush(file_name, 'replace_na_man:' + column_name)
+        datastore.lpush(file_name, 'replace_na_man:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -91,7 +104,7 @@ def replace_na_median(file_name, column_name):
     try:
         json = pandas_func.replace_na_numeric(app.config['UPLOAD_PATH'], file_name, column_name, 'median')
         pandas_func.export(json)
-        file_history.lpush(file_name, 'replace_na_median:' + column_name)
+        datastore.lpush(file_name, 'replace_na_median:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -103,7 +116,7 @@ def replace_na_mode_numeric(file_name, column_name):
     try:
         json = pandas_func.replace_na_numeric(app.config['UPLOAD_PATH'], file_name, column_name, 'mode')
         pandas_func.export(json)
-        file_history.lpush(file_name, 'replace_na_mode_numeric:' + column_name)
+        datastore.lpush(file_name, 'replace_na_mode_numeric:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -115,7 +128,7 @@ def replace_na_unknown(file_name, column_name):
     try:
         json = pandas_func.replace_na_categorical(app.config['UPLOAD_PATH'], file_name, column_name, 'unknown')
         pandas_func.export(json)
-        file_history.lpush(file_name, 'remove_na_unknown:' + column_name)
+        datastore.lpush(file_name, 'remove_na_unknown:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -127,7 +140,7 @@ def replace_na_ffill(file_name, column_name):
     try:
         json = pandas_func.replace_na_categorical(app.config['UPLOAD_PATH'], file_name, column_name, 'ffill')
         pandas_func.export(json)
-        file_history.lpush(file_name, 'replace_na_ffill:' + column_name)
+        datastore.lpush(file_name, 'replace_na_ffill:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -139,7 +152,7 @@ def replace_na_bfill(file_name, column_name):
     try:
         json = pandas_func.replace_na_categorical(app.config['UPLOAD_PATH'], file_name, column_name, 'bfill')
         pandas_func.export(json)
-        file_history.lpush(file_name, 'replace_na_bfill:' + column_name)
+        datastore.lpush(file_name, 'replace_na_bfill:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -151,7 +164,7 @@ def replace_na_mode_categorical(file_name, column_name):
     try:
         json = pandas_func.replace_na_categorical(app.config['UPLOAD_PATH'], file_name, column_name, 'mode')
         pandas_func.export(json)
-        file_history.lpush(file_name, 'replace_na_mode_categorical:' + column_name)
+        datastore.lpush(file_name, 'replace_na_mode_categorical:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -162,7 +175,7 @@ def replace_na_mode_categorical(file_name, column_name):
 def rename_column(file_name, old_column, new_column):
     try:
         json = pandas_func.rename(app.config['UPLOAD_PATH'], file_name, old_column, new_column)
-        file_history.lpush(file_name, 'rename_column:' + old_column + ':' + new_column)
+        datastore.lpush(file_name, 'rename_column:' + old_column + ':' + new_column)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -173,7 +186,7 @@ def rename_column(file_name, old_column, new_column):
 def normalize(file_name, column_name):
     try:
         json = pandas_func.normalize(app.config['UPLOAD_PATH'], file_name, column_name)
-        file_history.lpush(file_name, 'normalize:' + column_name)
+        datastore.lpush(file_name, 'normalize:' + column_name)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -191,7 +204,8 @@ def head_or_tail(file_name, direction, n):
     if n > app.config['MAX_HEADER_ROWS']:
         return '\n Exceeds max configured records' , 404
     try:
-        json = pandas_func.view_dataframe(app.config['UPLOAD_PATH'], file_name, direction, n)
+        df = datastore.get_df(file_name)
+        json = pandas_func.view_dataframe(df, direction, n)
         return '\n' + json, 200
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404     
