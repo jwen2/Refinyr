@@ -4,7 +4,9 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
-import SubmitComponent from "./Components/SubmitButton";
+import  SubmitComponent from "./Components/SubmitButton/SubmitButton";
+import FileUploader from './Components/FileUploader'
+
 
 const App = () => {
   const [columnDefs] = useState([
@@ -21,6 +23,7 @@ const App = () => {
 
 const [rowData, setRowData] = useState([])
 
+// For Fetch - add a variable for the file name at the end of the fetch URL
 useEffect(() => {
   fetch("https://www.ag-grid.com/example-assets/row-data.json")
   .then((response) => response.json())
@@ -28,9 +31,9 @@ useEffect(() => {
 }, []);
 
 return (
-<div>
+<div className="container mt-4">
   <div>
-    <SubmitComponent/>
+    <FileUploader />
   </div>
   <div className="ag-theme-alpine" style={{
     height:900, width:900
