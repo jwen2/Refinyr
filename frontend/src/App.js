@@ -1,73 +1,69 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
-import { AgGridReact } from "ag-grid-react";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import axios from "axios";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
 //import SubmitComponent from "./Components/SubmitButton/SubmitButton";
-import FileUploader from './components/FileUploader'
-
+import FileUploader from "./Components/FileUploader";
 
 const App = () => {
   const gridRef = useRef();
+  const [columnDefs, setColumnDefs] = useState([]);
+  const [rowData, setRowData] = useState([]);
 
-  const [columnDefs, setColumnDefs] = useState([
-    { field: "make" , sortable: true, filter: true },
-    { field: "model", sortable: true, filter: true },
-    { field: "price", sortable: true, filter: true },
-  ]);
+  const onBtnExport = useCallback(() => {
+    gridRef.current.api.exportDataAsCsv();
+  }, []);
 
-  // const [rowData] = useState ([
-  //   { make: "Toyota",  model: "make",  price: "make" },
-  //   { make: "Ford",  model: "make",  price: "make" },
-  //   { make: "Porsche",  model: "make",  price: "make" },
-  // ]);
+  // For Fetch - add a variable for the file name at the end of the fetch URL
+  useEffect(() => {
+    getFileData();
+  }, []);
 
-const [rowData, setRowData] = useState([]);
+  const getFileData = async () => {
+    const { data } = await axios.get(
+      "https://www.ag-grid.com/example-assets/row-data.json"
+    );
+    setRowData(data);
+    console.log(data[0]);
+    //getting keys for columndefs based on the first element in the row data
+    const keys = Object.keys(data[0]).map((key) => ({
+      field: key,
+      headerName: key,
+    }));
+    console.log(keys);
+    setColumnDefs(keys);
+  };
 
-const onBtnExport = useCallback(() => {
-  gridRef.current.api.exportDataAsCsv();
-}, []);
+  return (
+    <div className="container mt-4">
+      <div>
+        <FileUploader />
+      </div>
 
-// For Fetch - add a variable for the file name at the end of the fetch URL
-useEffect(() => {
-  fetch("https://www.ag-grid.com/example-assets/row-data.json")
-  .then((response) => response.json())
-  .then((data) => setRowData(data));
-}, []);
+      <div className="Export">
+        <button onClick={onBtnExport}>Download CSV export file</button>
+      </div>
 
-
-
-return (
-<div className="container mt-4">
-
-  <div>
-    <FileUploader />
-    {console.log(rowData)}
-  </div>
-
-  <div class="Export">
-    <button onClick={onBtnExport}>Download CSV export file</button>
-  </div>
-
-
-  <div className="ag-theme-alpine" style={{
-    height:900, width:900
-  }}>
-    <AgGridReact
-    ref={gridRef}
-    pagination={true}
-    columnDefs={columnDefs}
-    rowData={rowData}
-    />
-
-  </div>
-</div>
-)
-
-
+      <div
+        className="ag-theme-alpine"
+        style={{
+          height: 900,
+          width: 900,
+        }}
+      >
+        <AgGridReact
+          ref={gridRef}
+          pagination={true}
+          columnDefs={columnDefs}
+          rowData={rowData}
+        />
+      </div>
+    </div>
+  );
 };
 export default App;
-
 
 //https://www.youtube.com/watch?v=6PA45adHun8&t=222s
