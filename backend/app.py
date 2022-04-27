@@ -1,13 +1,16 @@
-from flask import Flask, request, abort, send_from_directory
+from flask import Flask, flash, request, abort, send_from_directory, redirect
 import os
 import pandas_func
+import base64
+from flask_cors import CORS
+from entity import step
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 100
-
+CORS(app)
 
 @app.route('/hello')
 def load():
@@ -24,6 +27,20 @@ def upload_file():
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
         return "\n Saved", 200
     return "\n No file attached", 400
+
+@app.route("/test", methods=["POST"])
+def data():    
+    # if 'file' not in request.files:
+    #         # flash('No file part')
+    #     return redirect(request.url)
+    data = request.get_json().get('file')
+    base64Response = data.split(',')[1]
+
+    decrypted = base64.b64decode(base64Response).decode('utf-8')
+    print(decrypted)
+    #uploaded_file = request.files['file']
+    return "OK", 200
+
 
 @app.route("/downloader/<file_name>")
 def get_image(file_name):
@@ -159,15 +176,16 @@ def rename_column(file_name, old_column_name, new_column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('pandas/normalize/<string:file_name>/<string:column_name')
-def normalize(file_name, column_name):
-    try:
-        json = pandas_func.normalize(app.config['UPLOAD_PATH'], file_name, column_name)
-        return json, 200
-    except KeyError:
-        return "\n Invalid column name.", 404
-    except FileNotFoundError:
-        return '\n File not found ' + file_name, 404
+# @app.route('/pandas/normalize/<string:file_name>/<string:column_name')
+# def normalize(file_name, column_name):
+#     try:
+#         json = pandas_func.normalize(app.config['UPLOAD_PATH'], file_name, column_name)
+#         return json, 200
+#     except KeyError:
+#         return "\n Invalid column name.", 404
+#     except FileNotFoundError:
+#         return '\n File not found ' + file_name, 404
+
 
 @app.errorhandler(413)
 def too_large(e):
@@ -185,20 +203,16 @@ def head_or_tail(file_name, direction, n):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404     
 
-# structure of steps would be linkedlist of lists 
-# [[function, <Optional> param1, <Optional> param2....], ....]
+# structure of steps would be linkedlist of Steps
 # [ [rename_column, old_column_name, new_column_name], [normalize, column_name] .... ]
 # currently we have up to 2 parameters max
 # The parameters must be in order
 def invokeSteps(listOfSteps, file_name):
     for step in listOfSteps:
-        functionName = step[0]
-        if (step.len() == 2):
-            paramOne = step[1]
-            locals()[functionName](file_name, paramOne)
-        if (step.len() == 3):
-            paramOne = step[1]
-            paramTwo = step[2]
-            locals()[functionName](file_name, paramOne, paramTwo)
+        if (step.length == 2):
+            paramOne = step.paramOne
+            locals()[step.functionName](file_name, step.paramOne)
+        if (step.length == 3):
+            locals()[step.functionName](file_name, step.paramOne, step.paramTwo)
         else:
-            locals()[functionName](file_name)
+            locals()[step.functionName](file_name)

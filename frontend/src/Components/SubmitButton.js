@@ -20,7 +20,7 @@ reader.readAsDataURL(files[0]);
 
 reader.onload=(e)=>{
 //This function puts the file into the API. Sends to backend
-  const url="xxxxxxxxxxbackendURLxxxxxxx";
+  const url="http://127.0.0.1:5000/test";
     const formData = { file:e.target.result }
     return post(url, formData)
       .then(response => console.warn("result", response))
