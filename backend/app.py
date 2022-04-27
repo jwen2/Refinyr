@@ -1,10 +1,12 @@
 from flask import Flask, request, abort, send_from_directory
+from flask_cors import CORS
 import os
 import pandas_func
 import datastore
 import pandas as pd
 
 app = Flask(__name__)
+CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'

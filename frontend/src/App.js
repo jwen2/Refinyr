@@ -20,11 +20,16 @@ const App = () => {
   // ]);
 
 const [rowData, setRowData] = useState([])
-
+const backend_url_1 = 'https://www.ag-grid.com/example-assets/row-data.json';
+const backend_url_2 = 'http://127.0.0.1:5000/pandas/tail/c.csv/1'
+const requestOptions = {
+  method: 'GET',
+  headers: {'Access-Control-Allow-Origin':'*'}
+};
 useEffect(() => {
-  fetch("https://www.ag-grid.com/example-assets/row-data.json")
+  fetch(backend_url_2, requestOptions)
   .then((response) => response.json())
-  .then((data) => setRowData(data));
+  .then((data) => console.log(data));
 }, []);
 
 return (
