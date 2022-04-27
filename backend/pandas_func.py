@@ -44,7 +44,6 @@ def remove_nulls(path, file_name, col_name):
     else:
         return "No Nulls"
 
-
 # """Rename column name into new column name"""
 def rename(path, file_name, old_name, new_name):
     df = pd.read_csv(os.path.join(path, file_name))
