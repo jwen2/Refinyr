@@ -16,7 +16,7 @@ def export(jsonString):
     df.to_csv("../csv/exported.csv")
 
 # Transform categorical variable column into mulitple binary predictors
-def getDummies(path, file_name,col_name):
+def getDummies(df, col_name):
     df = pd.read_csv(os.path.join(path, file_name))
     if df[col_name].nunique() < 45:
         df1 = pd.get_dummies(df[col_name])
@@ -27,8 +27,7 @@ def getDummies(path, file_name,col_name):
         return "Error - too many variables"
 
 # """Remove duplicates given a column index, method is optional for keeping first or last"""
-def remove_duplicates(path, file_name, col_name, method="first"):
-    df = pd.read_csv(os.path.join(path, file_name))
+def remove_duplicates(df, col_name, method="first"):
     if df[col_name].duplicated().values.any():
         df = df.drop_duplicates(subset=col_name, keep=method)
         return json.dumps(json.loads(df.to_json(orient='records')))
@@ -36,8 +35,7 @@ def remove_duplicates(path, file_name, col_name, method="first"):
         return "No Duplicates"
 
 # """Remove nulls given a column index"""
-def remove_nulls(path, file_name, col_name):
-    df = pd.read_csv(os.path.join(path, file_name))
+def remove_nulls(df, col_name):
     if df[col_name].isna().values.any():
         df = df.dropna(subset=col_name)
         return json.dumps(json.loads(df.to_json(orient='records')))
@@ -45,14 +43,12 @@ def remove_nulls(path, file_name, col_name):
         return "No Nulls"
 
 # """Rename column name into new column name"""
-def rename(path, file_name, old_name, new_name):
-    df = pd.read_csv(os.path.join(path, file_name))
+def rename(df, old_name, new_name):
     df.rename(columns = {old_name:new_name}, inplace = True)
     return json.dumps(json.loads(df.to_json(orient='records')))
 
 # """This function should only be used for numeric columns. Replace Na stat with mean median or mode can later add regressions and fancy stuff as well to here. Probably call another function"""
-def replace_na_numeric(path, file_name, col_name, stat):
-    df = pd.read_csv(os.path.join(path, file_name))
+def replace_na_numeric(df, col_name, stat):
     if stat == 'mean':
         df[col_name].fillna(value=df[col_name].mean(), inplace=True)
     if stat == 'mode':
@@ -62,8 +58,7 @@ def replace_na_numeric(path, file_name, col_name, stat):
     return json.dumps(json.loads(df.to_json(orient='records')))
 
 # """This function should be used to treat nulls in categorical columns""""
-def replace_na_categorical(path, file_name, col_name, stat):
-    df = pd.read_csv(os.path.join(path, file_name))
+def replace_na_categorical(df, col_name, stat):
     if stat == "unknown":
         df[col_name].fillna("unknown", inplace = True)
     if stat == 'ffill':
@@ -75,8 +70,7 @@ def replace_na_categorical(path, file_name, col_name, stat):
     return json.dumps(json.loads(df.to_json(orient='records')))
 
 # """"Normalize Column"""
-def normalize_column(path, file_name, col_name):
-    df = pd.read_csv(os.path.join(path, file_name))
+def normalize_column(df, col_name):
     df_max_scaled = df.copy()
     df_max_scaled[col_name] = df_max_scaled[col_name] /df_max_scaled[col_name].abs().max()
     return json.dumps(json.loads(df_max_scaled.to_json(orient='records')))
