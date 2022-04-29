@@ -36,3 +36,6 @@ To shell into container for debugging
 
     docker exec -it {container_id} sh 
     retrieve the container_id from: docker ps 
+
+
+yoooooooooooooo
