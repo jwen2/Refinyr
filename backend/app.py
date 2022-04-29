@@ -38,6 +38,8 @@ def data():
 
     decrypted = base64.b64decode(base64Response).decode('utf-8')
     print(decrypted)
+    with open("test.csv", "w", newline='') as f:
+        f.write(decrypted)
     #uploaded_file = request.files['file']
     return "OK", 200
 
