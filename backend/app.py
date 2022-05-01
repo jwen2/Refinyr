@@ -36,6 +36,9 @@ def load():
 
 @app.route('/uploader', methods = ['POST'])
 def upload_file():
+    # app.logger.debug('request:' + str(request))
+    # app.logger.debug('request.files:' + str(request.files))
+    # app.logger.debug('request.headers' + str(request.headers))
     uploaded_file = request.files['file']
     filename = uploaded_file.filename
     file_path = path.join(app.config['UPLOAD_PATH'], filename)
