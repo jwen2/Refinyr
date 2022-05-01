@@ -29,8 +29,10 @@ const requestOptions = {
 useEffect(() => {
   fetch(backend_url_2, requestOptions)
   .then((response) => response.json())
-  .then((data) => console.log(data));
+  .then((data) => setRowData(data));
 }, []);
+
+console.log(rowData)
 
 return (
 <div>
