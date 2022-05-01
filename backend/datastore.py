@@ -18,10 +18,12 @@ def lrange(key, start, stop):
     vals = r.lrange(key, start, stop)
     return vals
 
-def lpush(key, value):
+def lpush(key, value, df):
     key = key + '_h'
     r = g.redis
     val = r.lpush(key, value)
+    key = key + '_df'
+    update_df(key, df)
     return val
 
 def lpushes(key, *values):
@@ -57,3 +59,8 @@ def get_df(key):
         return pa.deserialize(data)
     except:
         print("No data")
+
+def update_df(key, df):
+    r = g.redis
+    df_compressed = pa.serialize(df).to_buffer().to_pybytes()
+    r.set(key, df_compressed)

@@ -2,7 +2,7 @@ from flask import Flask, request, abort, send_from_directory
 from io import StringIO
 from werkzeug.wrappers import Response
 from flask_cors import CORS
-import os
+from os import walk, path, remove
 import pandas_func
 import datastore
 import pandas as pd
@@ -25,22 +25,27 @@ def after_request(response):
     app.logger.debug('after_request')
     return response
 
-@app.route('/hello')
+@app.route('/init')
 def load():
-    return '\n hello'
+    filenames = next(walk(app.config['UPLOAD_PATH']), (None, None, []))[2]  # [] if no file
+    for filename in filenames:
+        file_path = path.join(app.config['UPLOAD_PATH'], filename)
+        app.logger.debug('file_path:' + file_path)
+        datastore.store_df(filename, pd.read_csv(file_path))
+    return {'filenames': filenames}
 
 @app.route('/uploader', methods = ['POST'])
 def upload_file():
     uploaded_file = request.files['file']
     filename = uploaded_file.filename
-    file_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+    file_path = path.join(app.config['UPLOAD_PATH'], filename)
     if filename != '':
-        file_ext = os.path.splitext(filename)[1]
+        file_ext = path.splitext(filename)[1]
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             return "\n Not a csv", 400
         uploaded_file.save(file_path)
         datastore.store_df(filename, pd.read_csv(file_path))
-        os.remove(file_path)
+        remove(file_path)
         return "\n Saved", 200
     return "\n No file attached", 400
 
@@ -64,7 +69,7 @@ def remove_duplicates(file_name, column_name):
     try: 
         df = datastore.get_df(file_name)
         json = pandas_func.remove_duplicates(df, column_name)
-        datastore.lpush(file_name, 'remove_duplicates:' + column_name)
+        datastore.lpush(file_name, 'remove_duplicates:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -87,7 +92,7 @@ def remove_nulls(file_name, column_name):
     try: 
         df = datastore.get_df(file_name)
         json = pandas_func.remove_nulls(df, column_name)
-        datastore.lpush(file_name, 'remove_nulls:' + column_name)
+        datastore.lpush(file_name, 'remove_nulls:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -99,7 +104,7 @@ def replace_na_mean(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.replace_na_numeric(df, column_name, 'mean')
-        datastore.lpush(file_name, 'replace_na_man:' + column_name)
+        datastore.lpush(file_name, 'replace_na_man:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -111,7 +116,7 @@ def replace_na_median(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.replace_na_numeric(df, column_name, 'median')
-        datastore.lpush(file_name, 'replace_na_median:' + column_name)
+        datastore.lpush(file_name, 'replace_na_median:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -123,7 +128,7 @@ def replace_na_mode_numeric(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.replace_na_numeric(df, column_name, 'mode')
-        datastore.lpush(file_name, 'replace_na_mode_numeric:' + column_name)
+        datastore.lpush(file_name, 'replace_na_mode_numeric:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -135,7 +140,7 @@ def replace_na_unknown(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.replace_na_categorical(df, column_name, 'unknown')
-        datastore.lpush(file_name, 'remove_na_unknown:' + column_name)
+        datastore.lpush(file_name, 'remove_na_unknown:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -147,7 +152,7 @@ def replace_na_ffill(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.replace_na_categorical(df, column_name, 'ffill')
-        datastore.lpush(file_name, 'replace_na_ffill:' + column_name)
+        datastore.lpush(file_name, 'replace_na_ffill:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -159,7 +164,7 @@ def replace_na_bfill(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.replace_na_categorical(df, column_name, 'bfill')
-        datastore.lpush(file_name, 'replace_na_bfill:' + column_name)
+        datastore.lpush(file_name, 'replace_na_bfill:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -171,7 +176,7 @@ def replace_na_mode_categorical(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.replace_na_categorical(df, column_name, 'mode')
-        datastore.lpush(file_name, 'replace_na_mode_categorical:' + column_name)
+        datastore.lpush(file_name, 'replace_na_mode_categorical:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -183,7 +188,7 @@ def rename_column(file_name, old_column, new_column):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.rename(df, old_column, new_column)
-        datastore.lpush(file_name, 'rename_column:' + old_column + ':' + new_column)
+        datastore.lpush(file_name, 'rename_column:' + old_column + ':' + new_column, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -195,7 +200,7 @@ def normalize(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.normalize(df, column_name)
-        datastore.lpush(file_name, 'normalize:' + column_name)
+        datastore.lpush(file_name, 'normalize:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
