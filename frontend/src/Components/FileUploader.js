@@ -14,15 +14,17 @@ const FileUploader = () => {
   const onSubmit = async e => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append('file', File);
-    const fileName = new FormData();
-    fileName.append('name', filename)
+    formData.append('file', new File([file], { type: 'text/csv' }));
+    console.log(filename);
+    console.log(formData.get('file'));
+
+
 
     try {
-      const res = await axios.post('/uploadURL', formData, fileName);
+      const res = await axios.post('/uploadURL', formData, filename);
       //this line is to set the res data
-      const { fileName, filePath} = res.data;
-      setUploadedFile = ({fileName, filePath})
+      const { filename, filePath} = res.data;
+      setUploadedFile = ({filename, filePath})
     } catch (err) {
       if(err.response.status === 500) {
         console.log('There was a problem with the server');
