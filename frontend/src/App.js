@@ -23,6 +23,7 @@ const App = () => {
 
   const getFileData = async () => {
     const { data } = await axios.get(
+      // "http://127.0.0.1:5000/pandas/head/cWithDups.csv/10"
       "https://www.ag-grid.com/example-assets/row-data.json"
     );
     setRowData(data);
