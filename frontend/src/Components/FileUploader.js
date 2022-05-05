@@ -1,50 +1,70 @@
-import React , { Fragment, useState } from 'react';
-import axios from 'axios';
+import React, { Fragment, useState } from "react";
+import * as Papa from "papaparse";
+import axios from "axios";
 
 const FileUploader = () => {
-  const [file, setFile] = useState('');
-  const [filename, setFilename] = useState('Choose File');
+  const [file, setFile] = useState("");
+  const [filename, setFilename] = useState("Choose File");
   const [uploadedFile, setUploadedFile] = useState({});
 
-  const onChange = e => {
-    setFile(e.target.files[0]);
-    setFilename(e.target.files[0].name);
-  }
+  const formData = new FormData();
+  const fileReader = new FileReader();
 
-  const onSubmit = async e => {
+  const onChange = (e) => {
+    const file = e.target.files[0];
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        console.log(results.data);
+      },
+    });
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('file', File);
-    const fileName = new FormData();
-    fileName.append('name', filename)
+    if (file) {
+      fileReader.onload = function (e) {
+        const csvOutput = e.target.result;
+      };
 
-    try {
-      const res = await axios.post('/uploadURL', formData, fileName);
-      //this line is to set the res data
-      const { fileName, filePath} = res.data;
-      setUploadedFile = ({fileName, filePath})
-    } catch (err) {
-      if(err.response.status === 500) {
-        console.log('There was a problem with the server');
-      }
-      else {
-        console.log(err.response.data.msg);
-      }
+      fileReader.readAsText(file);
     }
   };
 
+  //   const config = {
+  //     headers: { "content-type": "multipart/form-data" },
+  //   };
+  //   const url = "http://127.0.0.1:5000/test";
+
+  // //   try {
+  // //     const res = await axios.post(url, { formData }, config);
+  // //     //this line is to set the res data
+  // //     console.log(res);
+  // //   } catch (err) {
+  // //     // if (err.response.status === 500) {
+  // //     //   console.log("There was a problem with the server");
+  // //     // } else {
+  // //     //   console.log(err.response.data.msg);
+  // //     // }
+  // //   }
+  // // };
+
   return (
-    <Fragment>
+    <>
       <form onSubmit={onSubmit}>
-        <div className ="custom-file mb-4">
-          <input type="file" className ="custom-file-input" id="customFile" onChange={onChange}/>
-          <label className ="custom-file-label" htmlFor="customFile">
-            {filename}
-          </label>
+        <div className="custom-file mb-4">
+          <label>Select File: </label>
+          <input
+            type="file"
+            className="custom-file-input"
+            id="customFile"
+            onChange={onChange}
+          />
         </div>
-        <input type="submit" value="Upload" className="btn btn-primary btn-block mt-4" />
+        <button>Upload</button>
       </form>
-    </Fragment>
+    </>
   );
 };
 

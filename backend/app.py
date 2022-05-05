@@ -33,15 +33,15 @@ def data():
     # if 'file' not in request.files:
     #         # flash('No file part')
     #     return redirect(request.url)
-    data = request.get_json().get('file')
-    base64Response = data.split(',')[1]
+    #base64Response = data.split(',')[1]
 
-    decrypted = base64.b64decode(base64Response).decode('utf-8')
-    print(decrypted)
-    with open("test.csv", "w", newline='') as f:
-        f.write(decrypted)
+    #decrypted = base64.b64decode(base64Response).decode#('utf-8')
+    #print(decrypted)
+    #with open("test.csv", "w", newline='') as f:
+       # f.write(decrypted)
     #uploaded_file = request.files['file']
-    return "OK", 200
+    #return "OK", 200
+        print('hello')
 
 
 @app.route("/downloader/<file_name>")
