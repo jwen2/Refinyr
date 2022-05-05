@@ -5,7 +5,7 @@ import axios from "axios";
 const FileUploader = () => {
   const [file, setFile] = useState("");
   const [filename, setFilename] = useState("Choose File");
-  const [uploadedFile, setUploadedFile] = useState({});
+  let [uploadedFile, setUploadedFile] = useState({});
 
   const formData = new FormData();
   const fileReader = new FileReader();
