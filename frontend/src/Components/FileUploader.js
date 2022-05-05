@@ -23,12 +23,21 @@ const FileUploader = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (file) {
-      fileReader.onload = function (e) {
-        const csvOutput = e.target.result;
-      };
-
-      fileReader.readAsText(file);
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const res = await axios.post("http://127.0.0.1:5000/uploader", formData);
+      //this line is to set the res data
+      const { fileName, filePath } = res.data;
+      setUploadedFile = { fileName, filePath };
+    } catch (err) {
+      console.log(err);
+      // if(err.response.status === 500) {
+      //   console.log('There was a problem with the server');
+      // }
+      // else {
+      //   console.log(err.response.data.msg);
+      // }
     }
   };
 
