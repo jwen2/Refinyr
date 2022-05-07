@@ -36,9 +36,9 @@ def load():
 
 @app.route('/uploader', methods = ['POST'])
 def upload_file():
-    # app.logger.debug('request:' + str(request))
-    # app.logger.debug('request.files:' + str(request.files))
-    # app.logger.debug('request.headers' + str(request.headers))
+    app.logger.debug('request:' + str(request))
+    app.logger.debug('request.files:' + str(request.files))
+    app.logger.debug('request.headers' + str(request.headers))
     uploaded_file = request.files['file']
     filename = uploaded_file.filename
     file_path = path.join(app.config['UPLOAD_PATH'], filename)
@@ -49,7 +49,7 @@ def upload_file():
         uploaded_file.save(file_path)
         datastore.store_df(filename, pd.read_csv(file_path))
         remove(file_path)
-        return "\n Saved", 200
+        return pandas_func.df_to_json(datastore.get_df(filename))
     return "\n No file attached", 400
 
 #todo 
