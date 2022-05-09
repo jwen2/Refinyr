@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import axios from "axios";
+import './App.css';
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
@@ -41,13 +42,16 @@ const App = () => {
   };
 
   return (
+    
     <div className="container mt-4">
+      <hr className="divider"></hr>
+      
       <div>
         <FileUploader />
       </div>
 
-      <div className="Export">
-        <button onClick={onBtnExport}>Download CSV export file</button>
+      <div className="div right">
+        <button className="button" onClick={onBtnExport}>Download CSV</button>
       </div>
 
       <div

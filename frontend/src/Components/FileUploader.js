@@ -1,5 +1,6 @@
 import React , { Fragment, useState } from 'react';
 import axios from 'axios';
+import '../App.css';
 
 const FileUploader = () => {
   const [file, setFile] = useState('');
@@ -34,13 +35,15 @@ const FileUploader = () => {
   return (
     <Fragment>
       <form onSubmit={onSubmit}>
-        <div className ="custom-file mb-4">
+        <div className='div center'>
           <input type="file" className ="custom-file-input" id="customFile" onChange={onChange}/>
-          <label className ="custom-file-label" htmlFor="customFile">
+          {/* <label className ="custom-file-label" htmlFor="customFile">
             {filename}
-          </label>
+          </label> */}
         </div>
-        <input type="submit" value="Upload" className="btn btn-primary btn-block mt-4" />
+        <div className = 'div left'>
+        <input type="submit" value="Upload" className="button" />
+        </div>
       </form>
     </Fragment>
   );
