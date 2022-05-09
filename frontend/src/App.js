@@ -23,25 +23,29 @@ const App = () => {
   }, []);
 
   const getFileData = async () => {
-    const { data } = await axios.get(
-      // "http://127.0.0.1:5000/pandas/head/cWithDups.csv/10"
-      "https://www.ag-grid.com/example-assets/row-data.json"
-    );
-    setRowData(data);
-    console.log(data[0]);
-    //getting keys for columndefs based on the first element in the row data
-    const keys = Object.keys(data[0]).map((key) => ({
-      field: key,
-      headerName: key,
-    }));
-    console.log(keys);
-    setColumnDefs(keys);
+    try {
+      const { data } = await axios.get(
+        // "http://127.0.0.1:5000/pandas/head/cWithDups.csv/10"
+        "https://www.ag-grid.com/example-assets/row-data.json"
+      );
+      setRowData(data);
+      console.log(data[0]);
+      //getting keys for columndefs based on the first element in the row data
+      const keys = Object.keys(data[0]).map((key) => ({
+        field: key,
+        headerName: key[0].toUpperCase() + key.slice(1),
+      }));
+      console.log(keys);
+      setColumnDefs(keys);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="container mt-4">
       <div>
-        <FileUploader />
+        <FileUploader setRowData={setRowData} setColumnDefs={setColumnDefs} />
       </div>
 
       <div className="Export">

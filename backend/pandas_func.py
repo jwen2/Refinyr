@@ -74,3 +74,6 @@ def normalize_column(df, col_name):
     df_max_scaled = df.copy()
     df_max_scaled[col_name] = df_max_scaled[col_name] /df_max_scaled[col_name].abs().max()
     return json.dumps(json.loads(df_max_scaled.to_json(orient='records')))
+
+def df_to_json(df):
+    return json.dumps(json.loads(df.to_json(orient='records'))) 

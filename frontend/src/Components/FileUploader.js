@@ -2,23 +2,25 @@ import React, { Fragment, useState } from "react";
 import * as Papa from "papaparse";
 import axios from "axios";
 
-const FileUploader = () => {
+const FileUploader = ({ setRowData, setColumnDefs }) => {
   const [file, setFile] = useState("");
   const [filename, setFilename] = useState("Choose File");
   let [uploadedFile, setUploadedFile] = useState({});
 
-  const formData = new FormData();
-  const fileReader = new FileReader();
+  // const onChange = (e) => {
+  //   const file = e.target.files[0];
+  //   Papa.parse(file, {
+  //     header: true,
+  //     skipEmptyLines: true,
+  //     complete: function (results) {
+  //       console.log(results.data);
+  //     },
+  //   });
+  // };
 
   const onChange = (e) => {
-    const file = e.target.files[0];
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: function (results) {
-        console.log(results.data);
-      },
-    });
+    setFile(e.target.files[0]);
+    setFilename(e.target.files[0].name);
   };
 
   const onSubmit = async (e) => {
@@ -26,10 +28,23 @@ const FileUploader = () => {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const res = await axios.post("http://127.0.0.1:5000/uploader", formData);
+      const { data } = await axios.post(
+        "http://127.0.0.1:5000/uploader",
+        formData
+      );
+      setRowData(data);
+      console.log(data[0]);
+      //getting keys for columndefs based on the first element in the row data
+      const keys = Object.keys(data[0]).map((key) => ({
+        field: key,
+        headerName: key[0].toUpperCase() + key.slice(1),
+      }));
+      console.log(keys);
+      setColumnDefs(keys);
+
       //this line is to set the res data
-      const { fileName, filePath } = res.data;
-      setUploadedFile = { fileName, filePath };
+      // const { filename, filePath } = res.data;
+      // setUploadedFile = { filename, filePath };
     } catch (err) {
       console.log(err);
       // if(err.response.status === 500) {
@@ -40,7 +55,6 @@ const FileUploader = () => {
       // }
     }
   };
-
   //   const config = {
   //     headers: { "content-type": "multipart/form-data" },
   //   };
