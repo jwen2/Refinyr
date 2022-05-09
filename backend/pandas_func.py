@@ -75,5 +75,15 @@ def normalize_column(df, col_name):
     df_max_scaled[col_name] = df_max_scaled[col_name] /df_max_scaled[col_name].abs().max()
     return json.dumps(json.loads(df_max_scaled.to_json(orient='records')))
 
-def df_to_json(df):
-    return json.dumps(json.loads(df.to_json(orient='records'))) 
+
+
+### use this function to batch edit from the UI.
+
+def value_editor(df, col_name, old_value, new_value):
+    if old_value in df[col_name].unique():
+        NewColumn = df[col_name].replace({old_value : new_value})
+        Newdf = df
+        Newdf[col_name] = NewColumn
+        return Newdf
+    else:
+        return ("Error could not find value")

@@ -1,11 +1,11 @@
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import axios from "axios";
+import "./App.css";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
-//import SubmitComponent from "./Components/SubmitButton/SubmitButton";
 import FileUploader from "./Components/FileUploader";
 
 const App = () => {
@@ -23,33 +23,36 @@ const App = () => {
   }, []);
 
   const getFileData = async () => {
-    try {
-      const { data } = await axios.get(
-        // "http://127.0.0.1:5000/pandas/head/cWithDups.csv/10"
-        "https://www.ag-grid.com/example-assets/row-data.json"
-      );
-      setRowData(data);
-      console.log(data[0]);
-      //getting keys for columndefs based on the first element in the row data
-      const keys = Object.keys(data[0]).map((key) => ({
-        field: key,
-        headerName: key[0].toUpperCase() + key.slice(1),
-      }));
-      console.log(keys);
-      setColumnDefs(keys);
-    } catch (error) {
-      console.log(error);
-    }
+    const { data } = await axios.get(
+      // "http://127.0.0.1:5000/pandas/head/cWithDups.csv/10"
+      "https://www.ag-grid.com/example-assets/row-data.json"
+    );
+    setRowData(data);
+    console.log(data[0]);
+    //getting keys for columndefs based on the first element in the row data
+    const keys = Object.keys(data[0]).map((key) => ({
+      field: key,
+      headerName: key,
+      editable: true,
+      sortable: true,
+      resizable: true,
+    }));
+    console.log(keys);
+    setColumnDefs(keys);
   };
 
   return (
     <div className="container mt-4">
+      <hr className="divider"></hr>
+
       <div>
         <FileUploader setRowData={setRowData} setColumnDefs={setColumnDefs} />
       </div>
 
-      <div className="Export">
-        <button onClick={onBtnExport}>Download CSV export file</button>
+      <div className="div right">
+        <button className="button" onClick={onBtnExport}>
+          Download CSV
+        </button>
       </div>
 
       <div

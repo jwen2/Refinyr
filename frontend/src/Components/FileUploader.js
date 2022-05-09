@@ -1,22 +1,11 @@
 import React, { Fragment, useState } from "react";
-import * as Papa from "papaparse";
 import axios from "axios";
+import "../App.css";
 
 const FileUploader = ({ setRowData, setColumnDefs }) => {
   const [file, setFile] = useState("");
   const [filename, setFilename] = useState("Choose File");
   let [uploadedFile, setUploadedFile] = useState({});
-
-  // const onChange = (e) => {
-  //   const file = e.target.files[0];
-  //   Papa.parse(file, {
-  //     header: true,
-  //     skipEmptyLines: true,
-  //     complete: function (results) {
-  //       console.log(results.data);
-  //     },
-  //   });
-  // };
 
   const onChange = (e) => {
     setFile(e.target.files[0]);
@@ -76,16 +65,20 @@ const FileUploader = ({ setRowData, setColumnDefs }) => {
   return (
     <>
       <form onSubmit={onSubmit}>
-        <div className="custom-file mb-4">
-          <label>Select File: </label>
+        <div className="div center">
           <input
             type="file"
             className="custom-file-input"
             id="customFile"
             onChange={onChange}
           />
+          {/* <label className ="custom-file-label" htmlFor="customFile">
+            {filename}
+          </label> */}
         </div>
-        <button>Upload</button>
+        <div className="div left">
+          <input type="submit" value="Upload" className="button" />
+        </div>
       </form>
     </>
   );

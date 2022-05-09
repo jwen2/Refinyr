@@ -28,6 +28,159 @@
   color: #61dafb;
 }
 
+.button {
+  appearance: none;
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.button:hover{
+  background-color:#d7504d;    
+}
+
+body {
+  background-color:#92D293;
+  height: 100vh; /* Magic here */
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+  text-align: "center";
+  font-family:'Courier New', Courier, monospace;
+  font-style: normal;
+  color: white;
+  font-size: 250%;
+  position: relative;
+  opacity: 0;
+  animation: move-text 1s forwards;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Select a file';
+  display: inline-block;
+  background: white;
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+  display:flex;
+  justify-content: center;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+.div.center {
+  display:flex;
+  justify-content: center;
+}
+
+.divider {
+  color: #C5D1F3 ;
+  background-color: #C5D1F3 ;
+  height: 2px;
+}
+.div.right {
+  /* justify-content: right;
+  display:inline-block; */
+  /* float:right; */
+}
+
+.div.left {
+  /* justify-content: left; */
+  /* display:inline-block; */
+  float: left;
+  width:772px;
+}
+
+.test {
+  margin-top: 25px;
+  font-size: 21px;
+  display: flex;
+  justify-content: center;
+  text-align: "center";
+  font-family:'Courier New', Courier, monospace;
+  font-style: normal;
+  color: white;
+  font-size: 125%;
+  position: relative;
+  animation: move-text 1s forwards;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+     -moz-animation: fadein 2s; /* Firefox < 16 */
+      -ms-animation: fadein 2s; /* Internet Explorer */
+       -o-animation: fadein 2s; /* Opera < 12.1 */
+          animation: fadein 2s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes move-text {
+  0% { bottom: -0.2em; opacity: 1; }
+  50% { bottom: 0.2em; }
+  100% { bottom: 0; opacity: 1; }
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

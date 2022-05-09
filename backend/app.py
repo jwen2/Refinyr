@@ -231,12 +231,12 @@ def head_or_tail(file_name, direction, n):
 # [ [rename_column, old_column_name, new_column_name], [normalize, column_name] .... ]
 # currently we have up to 2 parameters max
 # The parameters must be in order
-def invokeSteps(listOfSteps, file_name):
-    for step in listOfSteps:
-        if (step.length == 2):
-            paramOne = step.paramOne
-            locals()[step.functionName](file_name, step.paramOne)
-        if (step.length == 3):
-            locals()[step.functionName](file_name, step.paramOne, step.paramTwo)
-        else:
-            locals()[step.functionName](file_name)
+# def invokeSteps(listOfSteps, file_name):
+#     for step in listOfSteps:
+#         if (step.length == 2):
+#             paramOne = step.paramOne
+#             locals()[step.functionName](file_name, step.paramOne)
+#         if (step.length == 3):
+#             locals()[step.functionName](file_name, step.paramOne, step.paramTwo)
+#         else:
+#             locals()[step.functionName](file_name)
