@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './App.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-<div class="Heading">
-  <h1> Data Project </h1>
+<div >
+  <h1 class="title"> Data Project </h1>
+  <h3 class="test">Transform your data with us.</h3>
   </div>
     <App />
 
