@@ -1,12 +1,12 @@
 To run backend install docker, from the directory with the docker-compose file run
-    
+
     docker-compose -f docker-compose.dev.yml up --build
 
 To run locally:
     python3 -m flask run --host=0.0.0.0
 
 To test the api run:
-    
+
     curl localhost:8000/api/load
 
 Port is mapped to 8000 (configurable in docker compose file)
@@ -34,8 +34,8 @@ Refer to flask documentation:
 
 To shell into container for debugging
 
-    docker exec -it {container_id} sh 
-    retrieve the container_id from: docker ps 
+    docker exec -it {container_id} sh
+    retrieve the container_id from: docker ps
 
 
 yoooooooooooooo

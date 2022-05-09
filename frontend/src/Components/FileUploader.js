@@ -18,8 +18,8 @@ const FileUploader = () => {
     try {
       const res = await axios.post('http://127.0.0.1:5000/uploader', formData);
       //this line is to set the res data
-      const { fileName, filePath} = res.data;
-      setUploadedFile = ({fileName, filePath})
+      const { filename, filePath} = res.data;
+      setUploadedFile = ({filename, filePath})
     } catch (err) {
       console.log(err)
       // if(err.response.status === 500) {

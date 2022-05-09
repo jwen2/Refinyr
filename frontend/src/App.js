@@ -5,7 +5,6 @@ import axios from "axios";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
-//import SubmitComponent from "./Components/SubmitButton/SubmitButton";
 import FileUploader from "./Components/FileUploader";
 
 const App = () => {
@@ -33,6 +32,9 @@ const App = () => {
     const keys = Object.keys(data[0]).map((key) => ({
       field: key,
       headerName: key,
+      editable: true,
+      sortable: true,
+      resizable: true,
     }));
     console.log(keys);
     setColumnDefs(keys);
