@@ -49,7 +49,8 @@ def upload_file():
         uploaded_file.save(file_path)
         datastore.store_df(filename, pd.read_csv(file_path))
         remove(file_path)
-        return pandas_func.df_to_json(datastore.get_df(filename))
+        return "Ok", 200
+#         return pandas_func.df_to_json(datastore.get_df(filename))
     return "\n No file attached", 400
 
 #todo 
