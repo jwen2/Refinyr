@@ -12,10 +12,24 @@ const App = () => {
   const gridRef = useRef();
   const [columnDefs, setColumnDefs] = useState([]);
   const [rowData, setRowData] = useState([]);
+  const [attribute, setAttribute] = useState([]);
+  const [selectedColumnValues, setSelectedColumnValues] = useState([]);
 
   const onBtnExport = useCallback(() => {
     gridRef.current.api.exportDataAsCsv();
   }, []);
+
+  const headerClickListener = async() => {
+    let colElements =  Array.from(document.getElementsByClassName('ag-header-cell'));
+    colElements.forEach((elem, index) => {
+      elem.addEventListener('click', () => {
+        let attribute = elem.getAttribute('col-id');
+        console.log(attribute);
+        setAttribute(attribute);
+      })
+    })
+    getFileData();
+  }
 
   // For Fetch - add a variable for the file name at the end of the fetch URL
   useEffect(() => {
@@ -23,21 +37,32 @@ const App = () => {
   }, []);
 
   const getFileData = async () => {
+    let tempSelectedColumnValues = [];
     const { data } = await axios.get(
       // "http://127.0.0.1:5000/pandas/head/cWithDups.csv/10"
       "https://www.ag-grid.com/example-assets/row-data.json"
     );
     setRowData(data);
-    console.log(data[0]);
+    // console.log(data[0]);
     //getting keys for columndefs based on the first element in the row data
     const keys = Object.keys(data[0]).map((key) => ({
       field: key,
       headerName: key,
       editable: true,
-      sortable: true,
+      // sortable: true,
       resizable: true,
+      cellStyle: (params) => {
+        if (params.colDef.field === attribute) {
+          tempSelectedColumnValues.push(params.value);
+          return { color: '#001D6D', backgroundColor: '#F3F7FF' };
+        }
+        return null;
+      },
     }));
-    console.log(keys);
+    setSelectedColumnValues(tempSelectedColumnValues);
+    if (selectedColumnValues.length !== 0) {
+      console.log(selectedColumnValues);
+    }
     setColumnDefs(keys);
   };
 
@@ -57,6 +82,7 @@ const App = () => {
 
       <div
         className="ag-theme-alpine"
+        onClick={headerClickListener}
         style={{
           height: 900,
           width: 900,
