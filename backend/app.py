@@ -12,7 +12,7 @@ CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'
-app.config['MAX_HEADER_ROWS'] = 100
+app.config['MAX_HEADER_ROWS'] = 1000
 
 @app.before_request
 def before_request():
@@ -49,8 +49,11 @@ def upload_file():
         uploaded_file.save(file_path)
         datastore.store_df(filename, pd.read_csv(file_path))
         remove(file_path)
-        return "\n Saved", 200
-#         return pandas_func.df_to_json(datastore.get_df(filename))
+        #Return the entire dataframe as a json
+        #return pandas_func.df_to_json(datastore.get_df(filename))
+
+        #Return head of first 1,000 rows as json
+        return head_or_tail(file_name, 'head', app.config['MAX_HEADER_ROWS'])
     return "\n No file attached", 400
 
 #todo 
@@ -85,6 +88,7 @@ def get_dummies(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.getDummies(df, file_name, column_name)
+        datastore.lpush(file_name, 'get_dummies' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
