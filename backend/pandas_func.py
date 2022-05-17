@@ -87,3 +87,6 @@ def value_editor(df, col_name, old_value, new_value):
         return Newdf
     else:
         return ("Error could not find value")
+
+def df_to_json(df):
+    return json.dumps(json.loads(df.to_json(orient='records')))
