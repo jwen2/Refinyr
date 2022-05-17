@@ -2,6 +2,7 @@ from sklearn import preprocessing
 import pandas as pd
 import json
 import os
+import matplotlib as mb
 
 def view_dataframe(df, direction, n):
     if direction == 'head':
@@ -87,3 +88,22 @@ def value_editor(df, col_name, old_value, new_value):
         return Newdf
     else:
         return ("Error could not find value")
+
+
+### use this function to trim the ends of a column
+### useful for treating outliers
+### recommended n's (0.01 for 99% confidence)
+###                 (0.05 for 95% confidence)
+###                 (0.10 for 90% confidence)
+
+
+def quartile_trimmer(df, col_name, n):
+    transformed = "clipped_" + col_name
+    upper = df[col_name].quantile(1-n)
+    lower = df[col_name].quantile(n)
+    df[transformed] = df[col_name].clip(lower, upper, axis = 0)
+    return df
+
+
+def histogram (df, col_name):
+    return df[col_name].hist()
