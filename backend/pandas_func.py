@@ -107,3 +107,8 @@ def quartile_trimmer(df, col_name, n):
 
 def histogram (df, col_name):
     return df[col_name].hist()
+
+
+def df_to_json(df):
+    return json.dumps(json.loads(df.to_json(orient='records')))
+>>>>>>> master
