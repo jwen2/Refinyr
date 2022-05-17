@@ -88,8 +88,7 @@ def value_editor(df, col_name, old_value, new_value):
         return Newdf
     else:
         return ("Error could not find value")
-
-
+      
 ### use this function to trim the ends of a column
 ### useful for treating outliers
 ### recommended n's (0.01 for 99% confidence)
@@ -111,4 +110,4 @@ def histogram (df, col_name):
 
 def df_to_json(df):
     return json.dumps(json.loads(df.to_json(orient='records')))
->>>>>>> master
+
