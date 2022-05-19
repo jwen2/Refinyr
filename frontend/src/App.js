@@ -24,7 +24,6 @@ const App = () => {
     colElements.forEach((elem, index) => {
       elem.addEventListener('click', () => {
         let attribute = elem.getAttribute('col-id');
-        console.log(attribute);
         setAttribute(attribute);
       })
     })
@@ -59,10 +58,11 @@ const App = () => {
         return null;
       },
     }));
-    setSelectedColumnValues(tempSelectedColumnValues);
-    if (selectedColumnValues.length !== 0) {
-      console.log(selectedColumnValues);
-    }
+    console.log(attribute);
+    // setSelectedColumnValues(tempSelectedColumnValues);
+    // if (selectedColumnValues.length !== 0) {
+    //   console.log(selectedColumnValues);
+    // }
     setColumnDefs(keys);
   };
 

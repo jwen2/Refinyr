@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
 <div >
-  <h1 class="title"> Data Project </h1>
+  <h1 class="title"> Refinyr </h1>
   <h3 class="test">Transform your data with us.</h3>
   </div>
     <App />
