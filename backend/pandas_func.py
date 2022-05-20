@@ -140,7 +140,3 @@ def histogram (df, col_name):
 
 def df_to_json(df):
     return json.dumps(json.loads(df.to_json(orient='records')))
-<<<<<<< HEAD
-=======
-
->>>>>>> 908a93877ad730a444a23512b39cfcc5f2cc5ff1
