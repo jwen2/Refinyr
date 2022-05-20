@@ -105,10 +105,39 @@ def quartile_trimmer(df, col_name, n):
     return df
 
 
+#### date transformer, extracts specific information from a specific date variable.
+### can extract day, month, year, quarter, dayofweek, weekday in text.
+### t = type of date transformation
+
+def dateTransformer(df, col_name, t):
+    df[col_name] = pd.to_datetime(df[col_name])
+    if t == 'day':
+        df[col_name+"_day"] = df[col_name].dt.day
+        return df
+    elif t == 'month':
+        df[col_name+"_month"] = df[col_name].dt.month
+        return df
+    elif t == 'year':
+        df[col_name+"_year"] = df[col_name].dt.year
+        return df
+    elif t == 'quarter':
+        df[col_name+"_quarter"] = df[col_name].dt.quarter
+        return df
+    elif t == 'dayofweek':
+        df[col_name+"_dayofweek"] = df[col_name].dt.dayofweek
+        return df
+    elif t == 'weekday':
+        df[col_name+"_weekday"] = df[col_name].dt.day_name()
+        return df
+    else:
+        return df
+
+
+
+
+
 def histogram (df, col_name):
     return df[col_name].hist()
 
-
 def df_to_json(df):
     return json.dumps(json.loads(df.to_json(orient='records')))
->>>>>>> master
