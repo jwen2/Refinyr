@@ -2,7 +2,13 @@ import axios from "axios";
 import React, { useState } from "react";
 import Select from "react-select";
 
-const Menu = ({ fileSelected, filename, attribute }) => {
+const Menu = ({
+  fileSelected,
+  filename,
+  attribute,
+  setColumnDefs,
+  setRowData,
+}) => {
   const [selection, setSelection] = useState({});
 
   //can be replaced dynamic data with an async call
@@ -23,8 +29,14 @@ const Menu = ({ fileSelected, filename, attribute }) => {
         filename,
         attribute
       );
+      console.log(res.data);
+      setRowData(res.data);
 
-      console.log(res);
+      const keys = Object.keys(res.data[0]).map((key) => ({
+        field: key,
+        headerName: key[0].toUpperCase() + key.slice(1),
+      }));
+      setColumnDefs(keys);
     } catch (error) {
       console.log(error);
     }
