@@ -58,11 +58,8 @@ def upload_file():
         file_ext = path.splitext(filename)[1]
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             return "\n Not a csv", 400
-        uploaded_file.save(file_path)
-        datastore.store_df(filename, pd.read_csv(file_path))
-        remove(file_path)
-        #Return the entire dataframe as a json
-        #return pandas_func.df_to_json(datastore.get_df(filename))
+        file_data = str(uploaded_file.read(), 'UTF-8')
+        datastore.store_df(filename, pd.read_csv(StringIO(file_data), sep=','))
 
         #Return head of first 1,000 rows as json
         return head_or_tail(filename, 'head', app.config['MAX_HEADER_ROWS'])

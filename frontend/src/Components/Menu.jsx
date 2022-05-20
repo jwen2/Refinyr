@@ -6,7 +6,7 @@ import Select from "react-select";
 const Menu = ({
   fileSelected,
   filename,
-  attribute,
+  columnSelected,
   setColumnDefs,
   setRowData,
 }) => {
