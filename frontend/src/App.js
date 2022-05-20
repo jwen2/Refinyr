@@ -105,6 +105,8 @@ const App = () => {
           </div>
         </div>
         <Menu
+          setRowData={setRowData}
+          setColumnDefs={setColumnDefs}
           fileSelected={fileSelected}
           columnSelected={attribute}
           filename={filename}
