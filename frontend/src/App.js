@@ -14,8 +14,6 @@ const App = () => {
   const [columnDefs, setColumnDefs] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [attribute, setAttribute] = useState([]);
-  const [selectedColumnValues, setSelectedColumnValues] = useState([]);
-
   const [filename, setFilename] = useState("Choose File");
   const [fileSelected, setfileSelected] = useState(false);
 
@@ -30,11 +28,15 @@ const App = () => {
 
     colElements.forEach((elem, index) => {
       elem.addEventListener("click", () => {
-        let attribute = elem.getAttribute("col-id");
+        let attribute = elem.getAttribute('col-id');
         setAttribute(attribute);
-        setfileSelected(!fileSelected);
+        //need to look into putting this on when a column is selected (bug where if you click two columns it doesn't work)
+        console.log(filename);
+        if(filename !== null || filename !== "Choose File")
+          setfileSelected(true);
       });
     });
+    getFileData();
   };
 
   // For Fetch - add a variable for the file name at the end of the fetch URL
@@ -59,16 +61,11 @@ const App = () => {
       resizable: true,
       cellStyle: (params) => {
         if (params.colDef.field === attribute) {
-          tempSelectedColumnValues.push(params.value);
           return { color: "#001D6D", backgroundColor: "#F3F7FF" };
         }
         return null;
       },
     }));
-    setSelectedColumnValues(tempSelectedColumnValues);
-    if (selectedColumnValues.length !== 0) {
-      console.log(selectedColumnValues);
-    }
     setColumnDefs(keys);
   };
 
@@ -109,7 +106,7 @@ const App = () => {
         </div>
         <Menu
           fileSelected={fileSelected}
-          attribute={attribute}
+          columnSelected={attribute}
           filename={filename}
         />
       </div>
