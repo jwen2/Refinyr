@@ -16,6 +16,7 @@ app = Flask(__name__)
 CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
+#Path where test csv files are stored
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 1000
 
@@ -56,7 +57,6 @@ def upload_file():
     app.logger.debug('request.headers' + str(request.headers))
     uploaded_file = request.files['file']
     filename = uploaded_file.filename
-    file_path = path.join(app.config['UPLOAD_PATH'], filename)
     if filename != '':
         file_ext = path.splitext(filename)[1]
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
