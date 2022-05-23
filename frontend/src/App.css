@@ -30,15 +30,17 @@
 
 .button {
   appearance: none;
-  background-color: #FAFBFC;
+  background-color: #fafbfc;
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
-  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
+    rgba(255, 255, 255, 0.25) 0 1px 0 inset;
   box-sizing: border-box;
-  color: #24292E;
+  color: #24292e;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
@@ -54,12 +56,12 @@
   word-wrap: break-word;
 }
 
-.button:hover{
-  background-color:#d7504d;    
+.button:hover {
+  background-color: #d7504d;
 }
 
 body {
-  background-color:#92D293;
+  background-color: #92d293;
   height: 100vh; /* Magic here */
   display: flex;
   justify-content: center;
@@ -69,7 +71,7 @@ body {
   display: flex;
   justify-content: center;
   text-align: "center";
-  font-family:'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-style: normal;
   color: white;
   font-size: 250%;
@@ -82,7 +84,7 @@ body {
   visibility: hidden;
 }
 .custom-file-input::before {
-  content: 'Select a file';
+  content: "Select a file";
   display: inline-block;
   background: white;
   border: 1px solid #999;
@@ -95,7 +97,7 @@ body {
   text-shadow: 1px 1px #fff;
   font-weight: 700;
   font-size: 10pt;
-  display:flex;
+  display: flex;
   justify-content: center;
 }
 .custom-file-input:hover::before {
@@ -105,13 +107,13 @@ body {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 .div.center {
-  display:flex;
+  display: flex;
   justify-content: center;
 }
 
 .divider {
-  color: #C5D1F3 ;
-  background-color: #C5D1F3 ;
+  color: #c5d1f3;
+  background-color: #c5d1f3;
   height: 2px;
 }
 .div.right {
@@ -124,7 +126,7 @@ body {
   /* justify-content: left; */
   /* display:inline-block; */
   float: left;
-  width:772px;
+  width: 772px;
 }
 
 .test {
@@ -133,52 +135,80 @@ body {
   display: flex;
   justify-content: center;
   text-align: "center";
-  font-family:'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-style: normal;
   color: white;
   font-size: 125%;
   position: relative;
   animation: move-text 1s forwards;
   -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-     -moz-animation: fadein 2s; /* Firefox < 16 */
-      -ms-animation: fadein 2s; /* Internet Explorer */
-       -o-animation: fadein 2s; /* Opera < 12.1 */
-          animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+  -ms-animation: fadein 2s; /* Internet Explorer */
+  -o-animation: fadein 2s; /* Opera < 12.1 */
+  animation: fadein 2s;
 }
 
 @keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Firefox < 16 */
 @-moz-keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Internet Explorer */
 @-ms-keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Opera < 12.1 */
 @-o-keyframes fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes move-text {
-  0% { bottom: -0.2em; opacity: 1; }
-  50% { bottom: 0.2em; }
-  100% { bottom: 0; opacity: 1; }
+  0% {
+    bottom: -0.2em;
+    opacity: 1;
+  }
+  50% {
+    bottom: 0.2em;
+  }
+  100% {
+    bottom: 0;
+    opacity: 1;
+  }
 }
 
 @keyframes App-logo-spin {
@@ -188,4 +218,62 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+.pageContainer {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.mainContainer {
+  background-color: #dfdfdf;
+  padding: 10px;
+  width: 80vw;
+  display: flex;
+  flex-directon: row;
+  justify-content: space-between;
+  align-content: center;
+  flex-wrap: wrap;
+  border-radius: 10px;
+}
+
+.gridContainer {
+  display: flex;
+  flex: 2;
+  width: 80vw;
+}
+
+.menuContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  background-color: #dfdfdf;
+
+  flex: 2;
+}
+
+.menuInnerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 45%;
+}
+
+.menuInnerContainer:nth-child(2) {
+  flex: end;
+}
+
+.selectMenu {
+  margin-bottom: 0.5rem;
 }

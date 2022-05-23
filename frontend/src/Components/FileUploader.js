@@ -2,10 +2,9 @@ import React, { Fragment, useState } from "react";
 import axios from "axios";
 import "../App.css";
 
-const FileUploader = ({ setRowData, setColumnDefs }) => {
+const FileUploader = ({ setRowData, setColumnDefs, filename, setFilename }) => {
   const [file, setFile] = useState("");
-  const [filename, setFilename] = useState("Choose File");
-  let [uploadedFile, setUploadedFile] = useState({});
+  const [uploadedFile, setUploadedFile] = useState({});
 
   const onChange = (e) => {
     setFile(e.target.files[0]);

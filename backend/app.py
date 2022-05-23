@@ -1,4 +1,4 @@
-from flask import Flask, request, abort, send_from_directory
+from flask import Flask, request, abort, send_from_directory, jsonify
 from io import StringIO
 from werkzeug.wrappers import Response
 from flask_cors import CORS
@@ -6,6 +6,8 @@ from os import walk, path, remove
 import pandas_func
 import datastore
 import pandas as pd
+from inspect import getmembers, isfunction
+import sys
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
@@ -28,6 +30,16 @@ def after_request(response):
     app.logger.debug('after_request')
     return response
 
+@app.route('/getAllFunctions')
+def getAllFunctions():
+    excluded = ['upload_file', 'load', 'get_file', 'abort', 'head_or_tail', 'too_large', 'walk', 'getmembers', 'isfunction', 'send_from_directory', 'getAllFunctions']
+    funcArr = []
+    for x in getmembers(sys.modules[__name__], isfunction):
+        if (x[0] not in excluded):
+            funcArr.append(x[0])
+    print(funcArr)
+    return jsonify({'funcArr': funcArr}), 200
+
 @app.route('/init')
 def load():
     filenames = next(walk(app.config['UPLOAD_PATH']), (None, None, []))[2]  # [] if no file
@@ -49,14 +61,11 @@ def upload_file():
         file_ext = path.splitext(filename)[1]
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             return "\n Not a csv", 400
-        uploaded_file.save(file_path)
-        datastore.store_df(filename, pd.read_csv(file_path))
-        remove(file_path)
-        #Return the entire dataframe as a json
-        #return pandas_func.df_to_json(datastore.get_df(filename))
+        file_data = str(uploaded_file.read(), 'UTF-8')
+        datastore.store_df(filename, pd.read_csv(StringIO(file_data), sep=','))
 
         #Return head of first 1,000 rows as json
-        return head_or_tail(file_name, 'head', app.config['MAX_HEADER_ROWS'])
+        return head_or_tail(filename, 'head', app.config['MAX_HEADER_ROWS'])
     return "\n No file attached", 400
 
 #todo 
@@ -66,16 +75,16 @@ def get_file(file_name):
     csv_string = df.to_csv()
     return {'data': csv_string}
         
-@app.route('/pandas/head/<string:file_name>/<int:n>')
+@app.route('/pandas/get_head/<string:file_name>/<int:n>')
 def get_head(file_name, n):
     return head_or_tail(file_name, 'head', n)
 
-@app.route('/pandas/tail/<string:file_name>/<int:n>')
+@app.route('/pandas/get_tail/<string:file_name>/<int:n>')
 def get_tail(file_name, n):
     return head_or_tail(file_name, 'tail', n)
 
 @app.route('/pandas/rm_dups/<string:file_name>/<string:column_name>')
-def remove_duplicates(file_name, column_name):
+def rm_dups(file_name, column_name):
     try: 
         df = datastore.get_df(file_name)
         json = pandas_func.remove_duplicates(df, column_name)
@@ -99,7 +108,7 @@ def get_dummies(file_name, column_name):
         return '\n File not found ' + file_name, 404
 
 @app.route('/pandas/rm_nulls/<string:file_name>/<string:column_name>')
-def remove_nulls(file_name, column_name):
+def rm_nulls(file_name, column_name):
     try: 
         df = datastore.get_df(file_name)
         json = pandas_func.remove_nulls(df, column_name)
@@ -110,7 +119,7 @@ def remove_nulls(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
-@app.route('/pandas/replace/na_mean/<string:file_name>/<string:column_name>')
+@app.route('/pandas/replace_na_mean/<string:file_name>/<string:column_name>')
 def replace_na_mean(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
@@ -122,7 +131,7 @@ def replace_na_mean(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
-@app.route('/pandas/replace/na_median/<string:file_name>/<string:column_name>')
+@app.route('/pandas/replace_na_median/<string:file_name>/<string:column_name>')
 def replace_na_median(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
@@ -134,7 +143,7 @@ def replace_na_median(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
-@app.route('/pandas/replace/na_mode_numeric/<string:file_name>/<string:column_name>')
+@app.route('/pandas/replace_na_mode_numeric/<string:file_name>/<string:column_name>')
 def replace_na_mode_numeric(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
@@ -146,7 +155,7 @@ def replace_na_mode_numeric(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404 
 
-@app.route('/pandas/replace/na_unknown/<string:file_name>/<string:column_name>')
+@app.route('/pandas/replace_na_unknown/<string:file_name>/<string:column_name>')
 def replace_na_unknown(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
@@ -158,7 +167,7 @@ def replace_na_unknown(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404         
 
-@app.route('/pandas/replace/na_ffill/<string:file_name>/<string:column_name>')
+@app.route('/pandas/replace_na_ffill/<string:file_name>/<string:column_name>')
 def replace_na_ffill(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
@@ -170,7 +179,7 @@ def replace_na_ffill(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404     
 
-@app.route('/pandas/replace/na_bfill/<string:file_name>/<string:column_name>')
+@app.route('/pandas/replace_na_bfill/<string:file_name>/<string:column_name>')
 def replace_na_bfill(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
@@ -182,7 +191,7 @@ def replace_na_bfill(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404     
 
-@app.route('/pandas/replace/na_mode_categorical/<string:file_name>/<string:column_name>')
+@app.route('/pandas/replace_na_mode_categorical/<string:file_name>/<string:column_name>')
 def replace_na_mode_categorical(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
