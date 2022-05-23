@@ -37,5 +37,14 @@ To shell into container for debugging
     docker exec -it {container_id} sh
     retrieve the container_id from: docker ps
 
+Flask with sqlalchemy -- sqlalchemy ORM 
+https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#installation
 
-yoooooooooooooo
+Debug mode for flask https://flask.palletsprojects.com/en/2.1.x/quickstart/#debug-mode
+bash
+$ export FLASK_ENV=development
+$ flask run
+
+cmd
+> set FLASK_ENV=development
+> flask run
