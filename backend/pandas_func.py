@@ -131,7 +131,19 @@ def dateTransformer(df, col_name, t):
     else:
         return df
 
-
+def transformer(df, col_name, x):
+    if df[col_name].dtypes == "int64":
+        if x == "squared":
+            df[col_name+"_squared"] = df[col_name] * df[col_name]
+            return (df)
+        if x == "log":
+            df[col_name+"_ln"] = np.log(df[col_name])
+            return (df)
+        if x == "root2":
+            df[col_name+"_root2"] = np.sqrt(df[col_name])
+            return (df)
+    else:
+        return ("Can not apply transformation to none numeric column")
 
 
 def histogram (df, col_name):
