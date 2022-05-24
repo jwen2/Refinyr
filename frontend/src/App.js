@@ -36,7 +36,6 @@ const App = () => {
           setfileSelected(true);
       });
     });
-    getFileData();
   };
 
   // For Fetch - add a variable for the file name at the end of the fetch URL
@@ -55,10 +54,11 @@ const App = () => {
     //getting keys for columndefs based on the first element in the row data
     const keys = Object.keys(data[0]).map((key) => ({
       field: key,
-      headerName: key,
+      headerName: key[0].toUpperCase() + key.slice(1),
       editable: true,
       // sortable: true,
       resizable: true,
+
       cellStyle: (params) => {
         if (params.colDef.field === attribute) {
           return { color: "#001D6D", backgroundColor: "#F3F7FF" };
