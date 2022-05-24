@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useState } from "react";
 import Select from "react-select";
 
-
 const Menu = ({
   fileSelected,
   filename,
@@ -10,7 +9,6 @@ const Menu = ({
   setColumnDefs,
   setRowData,
 }) => {
-
   const [selection, setSelection] = useState({});
 
   //can be replaced dynamic data with an async call
@@ -23,7 +21,10 @@ const Menu = ({
     { value: "replace_na_unknown", label: "Replace NA with Unknown" },
     { value: "replace_na_ffill", label: "Replace NA with ffill" },
     { value: "replace_na_bfill", label: "Replace NA with bfill" },
-    { value: "replace_na_mode_categorical", label: "Replace NA with Mode Categorical" },
+    {
+      value: "replace_na_mode_categorical",
+      label: "Replace NA with Mode Categorical",
+    },
     //need to have pop up or something to input second value for rename column
     //{ value: "rename_column", label: "Rename Column"},
     { value: "normalize", label: "Normalize Column" },

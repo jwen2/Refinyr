@@ -28,15 +28,14 @@ const App = () => {
 
     colElements.forEach((elem, index) => {
       elem.addEventListener("click", () => {
-        let attribute = elem.getAttribute('col-id');
+        let attribute = elem.getAttribute("col-id");
         setAttribute(attribute);
         //need to look into putting this on when a column is selected (bug where if you click two columns it doesn't work)
         console.log(filename);
-        if(filename !== null || filename !== "Choose File")
+        if (filename !== null || filename !== "Choose File")
           setfileSelected(true);
       });
     });
-    getFileData();
   };
 
   // For Fetch - add a variable for the file name at the end of the fetch URL
@@ -55,10 +54,11 @@ const App = () => {
     //getting keys for columndefs based on the first element in the row data
     const keys = Object.keys(data[0]).map((key) => ({
       field: key,
-      headerName: key,
+      headerName: key[0].toUpperCase() + key.slice(1),
       editable: true,
       // sortable: true,
       resizable: true,
+
       cellStyle: (params) => {
         if (params.colDef.field === attribute) {
           return { color: "#001D6D", backgroundColor: "#F3F7FF" };
