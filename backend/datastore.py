@@ -18,9 +18,13 @@ def lrange(key, start, stop):
     vals = r.lrange(key, start, stop)
     return vals
 
+# Store history of functions applied to dataframe
+# key   = filename + _h --- EX: test.csv_h
+# value = 'some_string_with_information_about_function_and_arguments' 
 def lpush(key, value, df):
     key = key + '_h'
     r = g.redis
+    g.current_function['name'] = get_function_name(value)
     val = r.lpush(key, value)
     key = key + '_df'
     update_df(key, df)
@@ -64,3 +68,8 @@ def update_df(key, df):
     r = g.redis
     df_compressed = pa.serialize(df).to_buffer().to_pybytes()
     r.set(key, df_compressed)
+
+# Input  -> replace_na_mode_numeric:temperature 
+# Return -> replace_na_mode_numeric
+def get_function_name(value):
+    return value.split(':')[0]

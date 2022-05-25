@@ -1,4 +1,4 @@
-from flask import Flask, request, abort, send_from_directory, jsonify
+from flask import Flask, request, abort, send_from_directory, jsonify, g
 from io import StringIO
 from werkzeug.wrappers import Response
 from flask_cors import CORS
@@ -9,23 +9,57 @@ import pandas as pd
 from inspect import getmembers, isfunction
 import sys
 
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
+
 app = Flask(__name__)
 CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
+#Path where test csv files are stored
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 1000
 
+#In memory db setup
+basedir = path.abspath(path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + path.join(basedir, 'database.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+@app.before_first_request
+def init_db():
+    app.logger.debug('before_first_request')
+    # Drop all existing tables. Useful if you add/delete columns thru code and want to reflect changes in database.
+    # Otherwise comment out drop_all()
+    db.drop_all()
+    db.create_all()
+
 @app.before_request
 def before_request():
+    g.current_function = {}
     app.logger.debug('before_request')
     datastore.get_datastore()
 
 @app.after_request
 def after_request(response):
+    insert_or_update(g.current_function)
     datastore.close_datastore()
     app.logger.debug('after_request')
     return response
+
+#todo should just be update...create a init.sql file and populate table on start up
+def insert_or_update(current_function):
+    if current_function.get('name') is not None:
+        app.logger.debug('insert or update func ' + current_function['name'])
+        fn = FunctionStat.query.filter_by(function_name=current_function['name']).first()
+        if fn is None:
+            app.logger.debug('new function ' + current_function['name'] + ' count 1')
+            db.session.add(FunctionStat(function_name=current_function['name'], count=1))
+        else:
+            fn.count = fn.count + 1
+            app.logger.debug('existing function ' + fn.function_name + ' count ' + str(fn.count))
+            db.session.add(fn)
+        db.session.commit()
 
 @app.route('/getAllFunctions')
 def getAllFunctions():
@@ -53,16 +87,12 @@ def upload_file():
     app.logger.debug('request.headers' + str(request.headers))
     uploaded_file = request.files['file']
     filename = uploaded_file.filename
-    file_path = path.join(app.config['UPLOAD_PATH'], filename)
     if filename != '':
         file_ext = path.splitext(filename)[1]
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             return "\n Not a csv", 400
-        uploaded_file.save(file_path)
-        datastore.store_df(filename, pd.read_csv(file_path))
-        remove(file_path)
-        #Return the entire dataframe as a json
-        #return pandas_func.df_to_json(datastore.get_df(filename))
+        file_data = str(uploaded_file.read(), 'UTF-8')
+        datastore.store_df(filename, pd.read_csv(StringIO(file_data), sep=','))
 
         #Return head of first 1,000 rows as json
         return head_or_tail(filename, 'head', app.config['MAX_HEADER_ROWS'])
@@ -100,7 +130,7 @@ def get_dummies(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         json = pandas_func.getDummies(df, file_name, column_name)
-        datastore.lpush(file_name, 'get_dummies' + column_name, df)
+        datastore.lpush(file_name, 'get_dummies:' + column_name, df)
         return json, 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -257,3 +287,12 @@ def head_or_tail(file_name, direction, n):
 #             locals()[step.functionName](file_name, step.paramOne, step.paramTwo)
 #         else:
 #             locals()[step.functionName](file_name)
+
+
+class FunctionStat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    function_name = db.Column(db.String(100), nullable=False)
+    count =  db.Column(db.Integer, nullable=False)
+    
+    def __repr__(self):
+        return f'<FunctionStat {self.function_name}>'

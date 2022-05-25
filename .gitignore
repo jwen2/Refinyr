@@ -1,2 +1,4 @@
-backend/*.pyc
-backend/*.rdb
+*.pyc
+backend/__pycache__
+*.rdb
+*.db
