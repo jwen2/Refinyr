@@ -257,6 +257,37 @@ def normalize(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
+#TODO:###############
+@app.route('/pandas/value_editor/<string:file_name>/<string:column_name>')
+def value_editor():
+    return 200
+
+@app.route('/pandas/quartile_trimmer/<string:file_name>/<string:column_name/<float:n>')
+def quartile_trimmer(file_name, column_name, n):
+    try: 
+        df = datastore.get_df(file_name);
+        json = pandas_func.quartile_trimmer(df, column_name, n)
+        datastore.lpush(file_name, 'quartile_trimmer:' + column_name + ':' + n, df)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/date_transformer/<string:file_name/<string:column_name/<string:type>')
+def date_transformer(file_name, column_name, type):
+    try: 
+        df = datastore.get_df(file_name);
+        json = pandas_func.dateTransformer(df, column_name, type)
+        datastore.lpush(file_name, 'date_transformer:' + column_name + ':' + type, df)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+
+
 @app.errorhandler(413)
 def too_large(e):
     return "\nFile is too large", 413

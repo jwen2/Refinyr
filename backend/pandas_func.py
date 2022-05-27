@@ -101,7 +101,7 @@ def quartile_trimmer(df, col_name, n):
     upper = df[col_name].quantile(1-n)
     lower = df[col_name].quantile(n)
     df[transformed] = df[col_name].clip(lower, upper, axis = 0)
-    return df
+    return json.dumps(json.loads(df.to_json(orient='records')))
 
 
 #### date transformer, extracts specific information from a specific date variable.
