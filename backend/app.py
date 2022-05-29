@@ -143,7 +143,7 @@ def rm_nulls(file_name, column_name):
         df = datastore.get_df(file_name)
         df = pandas_func.remove_nulls(df, column_name)
         datastore.lpush(file_name, 'remove_nulls:' + column_name, df)
-        return df_to_json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -179,7 +179,7 @@ def replace_na_mode_numeric(file_name, column_name):
         df = datastore.get_df(file_name)
         df = pandas_func.replace_na_numeric(df, column_name, 'mode')
         datastore.lpush(file_name, 'replace_na_mode_numeric:' + column_name, df)
-        return df_to_json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
