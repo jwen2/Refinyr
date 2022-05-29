@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Select from "react-select";
+import { NavDropdown, Navbar, Nav, Row } from "react-bootstrap";
+import { DropdownSubmenu, NavDropdownMenu } from "react-bootstrap-submenu";
+import "./Menu.css";
 
 const Menu = ({
   fileSelected,
@@ -68,9 +71,35 @@ const Menu = ({
   };
 
   return (
-    <div className="menuContainer">
-      <h3 className="optionTitle">Transform:</h3>
-      {!fileSelected ? (
+    <>
+      <div className="optionsContainer">
+        <p>Transform:</p>
+
+        <Navbar
+          collapseOnSelect
+          bg="dark"
+          variant="dark"
+          style={{ height: "4vh" }}
+        >
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdownMenu title="Options" id="collasible-nav-dropdown">
+                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                <DropdownSubmenu href="#action/3.7" title="Text to show">
+                  <NavDropdown.Item href="#action/8.1">Sub 1</NavDropdown.Item>
+                  <DropdownSubmenu href="#action/3.7" title="Text to show">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                </DropdownSubmenu>
+              </NavDropdownMenu>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+
+        {/* {!fileSelected ? (
         ""
       ) : (
         <div className="menuInnerContainer">
@@ -88,9 +117,9 @@ const Menu = ({
             Transform
           </button>
         </div>
-      )}
-    </div>
+      )} */}
+      </div>
+    </>
   );
 };
-
 export default Menu;

@@ -2,12 +2,14 @@ import React, { useCallback, useRef, useState, useEffect } from "react";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import axios from "axios";
 import "./App.css";
+import { Row, Col } from "react-bootstrap";
 
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
 import FileUploader from "./Components/FileUploader";
 import Menu from "./Components/Menu";
+import Footer from "./Components/Footer";
 
 const App = () => {
   const gridRef = useRef();
@@ -71,39 +73,14 @@ const App = () => {
 
   return (
     <div className="pageContainer">
-      <hr className="divider"></hr>
-      <div>
-        <FileUploader
-          setRowData={setRowData}
-          setColumnDefs={setColumnDefs}
-          filename={filename}
-          setFilename={setFilename}
-        />
-      </div>
-      <div className="div right">
-        <button className="button" onClick={onBtnExport}>
-          Download CSV
-        </button>
-      </div>
-      <br />
+      <FileUploader
+        setRowData={setRowData}
+        setColumnDefs={setColumnDefs}
+        filename={filename}
+        setFilename={setFilename}
+        onBtnExport={onBtnExport}
+      />
       <div className="mainContainer">
-        <div className="gridContainer">
-          <div
-            className="ag-theme-alpine"
-            onClick={headerClickListener}
-            style={{
-              height: 500,
-              width: 1000,
-            }}
-          >
-            <AgGridReact
-              ref={gridRef}
-              pagination={true}
-              columnDefs={columnDefs}
-              rowData={rowData}
-            />
-          </div>
-        </div>
         <Menu
           setRowData={setRowData}
           setColumnDefs={setColumnDefs}
@@ -111,7 +88,24 @@ const App = () => {
           columnSelected={attribute}
           filename={filename}
         />
+
+        <div
+          className="ag-theme-alpine"
+          onClick={headerClickListener}
+          style={{
+            height: 450,
+            width: "70%",
+          }}
+        >
+          <AgGridReact
+            ref={gridRef}
+            pagination={true}
+            columnDefs={columnDefs}
+            rowData={rowData}
+          />
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };
