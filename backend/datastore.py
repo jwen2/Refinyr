@@ -1,6 +1,7 @@
 import redis
 import pyarrow as pa
 from flask import g
+from flask import g, current_app as app
 
 def get_datastore():
     if ('redis' not in g):
@@ -22,12 +23,12 @@ def lrange(key, start, stop):
 # key   = filename + _h --- EX: test.csv_h
 # value = 'some_string_with_information_about_function_and_arguments' 
 def lpush(key, value, df):
+    update_df(key + '_df', df)
     key = key + '_h'
     r = g.redis
     g.current_function['name'] = get_function_name(value)
+    app.logger.info('Adding new function %s to history of file %s', g.current_function['name'], key)
     val = r.lpush(key, value)
-    key = key + '_df'
-    update_df(key, df)
     return val
 
 def lpushes(key, *values):
@@ -65,6 +66,7 @@ def get_df(key):
         print("No data")
 
 def update_df(key, df):
+    app.logger.info('Updating dataframe %s', key)
     r = g.redis
     df_compressed = pa.serialize(df).to_buffer().to_pybytes()
     r.set(key, df_compressed)

@@ -6,6 +6,7 @@ from os import walk, path, remove
 import pandas_func
 import datastore
 import pandas as pd
+import json
 from inspect import getmembers, isfunction
 import sys
 
@@ -82,9 +83,7 @@ def load():
 
 @app.route('/uploader', methods = ['POST'])
 def upload_file():
-    app.logger.debug('request:' + str(request))
-    app.logger.debug('request.files:' + str(request.files))
-    app.logger.debug('request.headers' + str(request.headers))
+    app.logger.info('Upload file')
     uploaded_file = request.files['file']
     filename = uploaded_file.filename
     if filename != '':
@@ -92,6 +91,7 @@ def upload_file():
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             return "\n Not a csv", 400
         file_data = str(uploaded_file.read(), 'UTF-8')
+        #print(file_data)
         datastore.store_df(filename, pd.read_csv(StringIO(file_data), sep=','))
 
         #Return head of first 1,000 rows as json
@@ -117,9 +117,9 @@ def get_tail(file_name, n):
 def rm_dups(file_name, column_name):
     try: 
         df = datastore.get_df(file_name)
-        json = pandas_func.remove_duplicates(df, column_name)
+        df = pandas_func.remove_duplicates(df, column_name)
         datastore.lpush(file_name, 'remove_duplicates:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -129,9 +129,9 @@ def rm_dups(file_name, column_name):
 def get_dummies(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.getDummies(df, file_name, column_name)
+        df = pandas_func.getDummies(df, file_name, column_name)
         datastore.lpush(file_name, 'get_dummies:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -141,9 +141,9 @@ def get_dummies(file_name, column_name):
 def rm_nulls(file_name, column_name):
     try: 
         df = datastore.get_df(file_name)
-        json = pandas_func.remove_nulls(df, column_name)
+        df = pandas_func.remove_nulls(df, column_name)
         datastore.lpush(file_name, 'remove_nulls:' + column_name, df)
-        return json, 200
+        return df_to_json, 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -153,9 +153,9 @@ def rm_nulls(file_name, column_name):
 def replace_na_mean(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.replace_na_numeric(df, column_name, 'mean')
+        df = pandas_func.replace_na_numeric(df, column_name, 'mean')
         datastore.lpush(file_name, 'replace_na_man:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -165,9 +165,9 @@ def replace_na_mean(file_name, column_name):
 def replace_na_median(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.replace_na_numeric(df, column_name, 'median')
+        df = pandas_func.replace_na_numeric(df, column_name, 'median')
         datastore.lpush(file_name, 'replace_na_median:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -177,9 +177,9 @@ def replace_na_median(file_name, column_name):
 def replace_na_mode_numeric(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.replace_na_numeric(df, column_name, 'mode')
+        df = pandas_func.replace_na_numeric(df, column_name, 'mode')
         datastore.lpush(file_name, 'replace_na_mode_numeric:' + column_name, df)
-        return json, 200
+        return df_to_json, 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -189,9 +189,9 @@ def replace_na_mode_numeric(file_name, column_name):
 def replace_na_unknown(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.replace_na_categorical(df, column_name, 'unknown')
+        df = pandas_func.replace_na_categorical(df, column_name, 'unknown')
         datastore.lpush(file_name, 'remove_na_unknown:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -201,9 +201,9 @@ def replace_na_unknown(file_name, column_name):
 def replace_na_ffill(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.replace_na_categorical(df, column_name, 'ffill')
+        df = pandas_func.replace_na_categorical(df, column_name, 'ffill')
         datastore.lpush(file_name, 'replace_na_ffill:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -213,9 +213,9 @@ def replace_na_ffill(file_name, column_name):
 def replace_na_bfill(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.replace_na_categorical(df, column_name, 'bfill')
+        df = pandas_func.replace_na_categorical(df, column_name, 'bfill')
         datastore.lpush(file_name, 'replace_na_bfill:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -225,9 +225,9 @@ def replace_na_bfill(file_name, column_name):
 def replace_na_mode_categorical(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.replace_na_categorical(df, column_name, 'mode')
+        df = pandas_func.replace_na_categorical(df, column_name, 'mode')
         datastore.lpush(file_name, 'replace_na_mode_categorical:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -237,9 +237,9 @@ def replace_na_mode_categorical(file_name, column_name):
 def rename_column(file_name, old_column, new_column):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.rename(df, old_column, new_column)
+        df = pandas_func.rename(df, old_column, new_column)
         datastore.lpush(file_name, 'rename_column:' + old_column + ':' + new_column, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -249,9 +249,9 @@ def rename_column(file_name, old_column, new_column):
 def normalize(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.normalize(df, column_name)
+        df = pandas_func.normalize(df, column_name)
         datastore.lpush(file_name, 'normalize:' + column_name, df)
-        return json, 200
+        return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
     except FileNotFoundError:
@@ -265,14 +265,20 @@ if __name__ == "__main__":
     app.run()
 
 def head_or_tail(file_name, direction, n):
+    app.logger.info('head_or_tail %s %s %d', file_name, direction, n)
     if n > app.config['MAX_HEADER_ROWS']:
         return '\n Exceeds max configured records' , 404
     try:
         df = datastore.get_df(file_name)
-        json = pandas_func.view_dataframe(df, direction, n)
-        return '\n' + json, 200
+        df = pandas_func.view_dataframe(df, direction, n)
+        return '\n' + df_to_json(df), 200
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404     
+    except AttributeError:
+        return '\n File not found ' + file_name, 404
+
+def df_to_json(df):
+    return json.dumps(json.loads(df.to_json(orient='records')))
 
 # structure of steps would be linkedlist of Steps
 # [ [rename_column, old_column_name, new_column_name], [normalize, column_name] .... ]
