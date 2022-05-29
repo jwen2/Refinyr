@@ -42,9 +42,8 @@ def remove_duplicates(df, col_name, method="first"):
 # """Remove nulls given a column index"""
 def remove_nulls(df, col_name):
     app.logger.info('Remove nulls for column %s', col_name)
-    df = df.copy(deep=True)
     if df[col_name].isna().values.any():
-        df = df.dropna(subset=col_name)
+        df = df.dropna(subset=[col_name])
         return df
     else:
         return "No Nulls"
