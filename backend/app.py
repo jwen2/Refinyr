@@ -286,7 +286,17 @@ def date_transformer(file_name, column_name, type):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-
+@app.route('/pandas/transformer/<string:file_name/<string:column_name/<string:x>')
+def transformer(file_name, column_name, x):
+    try: 
+        df = datastore.get_df(file_name);
+        json = pandas_func.transformer(df, column_name, x)
+        datastore.lpush(file_name, 'transformer:' + column_name + ':' + x, df)
+        return json, 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
 
 @app.errorhandler(413)
 def too_large(e):
