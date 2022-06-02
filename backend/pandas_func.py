@@ -85,7 +85,7 @@ def value_editor(df, col_name, old_value, new_value):
         NewColumn = df[col_name].replace({old_value : new_value})
         Newdf = df
         Newdf[col_name] = NewColumn
-        return Newdf
+        return json.dumps(json.loads(Newdf.to_json(orient='records')))
     else:
         return ("Error could not find value")
 
@@ -112,36 +112,36 @@ def dateTransformer(df, col_name, t):
     df[col_name] = pd.to_datetime(df[col_name])
     if t == 'day':
         df[col_name+"_day"] = df[col_name].dt.day
-        return df
+        return json.dumps(json.loads(df.to_json(orient='records')))
     elif t == 'month':
         df[col_name+"_month"] = df[col_name].dt.month
-        return df
+        return json.dumps(json.loads(df.to_json(orient='records')))
     elif t == 'year':
         df[col_name+"_year"] = df[col_name].dt.year
-        return df
+        return json.dumps(json.loads(df.to_json(orient='records')))
     elif t == 'quarter':
         df[col_name+"_quarter"] = df[col_name].dt.quarter
-        return df
+        return json.dumps(json.loads(df.to_json(orient='records')))
     elif t == 'dayofweek':
         df[col_name+"_dayofweek"] = df[col_name].dt.dayofweek
-        return df
+        return json.dumps(json.loads(df.to_json(orient='records')))
     elif t == 'weekday':
         df[col_name+"_weekday"] = df[col_name].dt.day_name()
-        return df
+        return json.dumps(json.loads(df.to_json(orient='records')))
     else:
-        return df
+        return json.dumps(json.loads(df.to_json(orient='records')))
 
 def transformer(df, col_name, x):
     if df[col_name].dtypes == "int64":
         if x == "squared":
             df[col_name+"_squared"] = df[col_name] * df[col_name]
-            return (df)
+            return json.dumps(json.loads(df.to_json(orient='records')))
         if x == "log":
             df[col_name+"_ln"] = np.log(df[col_name])
-            return (df)
+            return json.dumps(json.loads(df.to_json(orient='records')))
         if x == "root2":
             df[col_name+"_root2"] = np.sqrt(df[col_name])
-            return (df)
+            return json.dumps(json.loads(df.to_json(orient='records')))
     else:
         return ("Can not apply transformation to none numeric column")
 
