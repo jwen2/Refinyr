@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import matplotlib as mb
 from flask import current_app as app
+from scipy import stats
 
 def view_dataframe(df, direction, n):
     app.logger.info('View dataframe %s %d', direction, n)
@@ -41,10 +42,8 @@ def remove_duplicates(df, col_name, method="first"):
 
 # """Remove nulls given a column index"""
 def remove_nulls(df, col_name):
-    app.logger.info('Remove nulls for column %s', col_name)
-    df = df.copy(deep=True)
     if df[col_name].isna().values.any():
-        df = df.dropna(subset=col_name)
+        df = df.dropna(subset=[col_name])
         return df
     else:
         return "No Nulls"
@@ -163,6 +162,18 @@ def transformer(df, col_name, x):
             return (df)
     else:
         return ("Can not apply transformation to none numeric column")
+
+#have to import a new popular library scipy.
+#takes in a dataframe and a column
+#outputs updates the dataframe to remove the outlier rows from the dataframe
+#operates similar to remove duplicates, and remove nulls
+def remove_outliers(df, col_name):
+    z_scores = stats.zscore(df[col_name])
+    abs_z_scores = np.abs(z_scores)
+    filtered = (abs_z_scores < 3)
+    updated_df = df[filtered]
+    return updated_df
+
 
 
 def histogram (df, col_name):
