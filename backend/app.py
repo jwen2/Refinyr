@@ -49,7 +49,7 @@ def after_request(response):
     app.logger.debug('after_request')
     return response
 
-todo should just be update...create a init.sql file and populate table on start up
+# todo should just be update...create a init.sql file and populate table on start up
 def insert_or_update(current_function):
     if current_function.get('name') is not None:
         app.logger.debug('insert or update func ' + current_function['name'])
