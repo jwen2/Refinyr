@@ -258,6 +258,43 @@ def normalize(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
+@app.route('/pandas/quartile_trimmer/<string:file_name>/<string:column_name/<float:n>')
+def quartile_trimmer(file_name, column_name, n):
+    try: 
+        df = datastore.get_df(file_name);
+        json = pandas_func.quartile_trimmer(df, column_name, n)
+        datastore.lpush(file_name, 'quartile_trimmer:' + column_name + ':' + n, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/date_transformer/<string:file_name/<string:column_name/<string:type>')
+def date_transformer(file_name, column_name, type):
+    try: 
+        df = datastore.get_df(file_name);
+        json = pandas_func.dateTransformer(df, column_name, type)
+        datastore.lpush(file_name, 'date_transformer:' + column_name + ':' + type, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/transformer/<string:file_name/<string:column_name/<string:x>')
+def transformer(file_name, column_name, x):
+    try: 
+        df = datastore.get_df(file_name);
+        json = pandas_func.transformer(df, column_name, x)
+        datastore.lpush(file_name, 'transformer:' + column_name + ':' + x, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+
 @app.errorhandler(413)
 def too_large(e):
     return "\nFile is too large", 413
@@ -300,10 +337,10 @@ def df_to_json(df):
 #             locals()[step.functionName](file_name)
 
 
-# class FunctionStat(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     function_name = db.Column(db.String(100), nullable=False)
-#     count =  db.Column(db.Integer, nullable=False)
+class FunctionStat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    function_name = db.Column(db.String(100), nullable=False)
+    count =  db.Column(db.Integer, nullable=False)
     
-#     def __repr__(self):
-#         return f'<FunctionStat {self.function_name}>'
+    def __repr__(self):
+        return f'<FunctionStat {self.function_name}>'
