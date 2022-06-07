@@ -2,6 +2,7 @@ from flask import Flask, request, abort, send_from_directory, jsonify, g
 from io import StringIO
 from werkzeug.wrappers import Response
 from flask_cors import CORS
+import os
 from os import walk, path, remove
 import pandas_func
 import datastore
@@ -21,7 +22,7 @@ app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 1000
 
-#In memory db setup
+# In memory db setup
 basedir = path.abspath(path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + path.join(basedir, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -48,7 +49,7 @@ def after_request(response):
     app.logger.debug('after_request')
     return response
 
-#todo should just be update...create a init.sql file and populate table on start up
+todo should just be update...create a init.sql file and populate table on start up
 def insert_or_update(current_function):
     if current_function.get('name') is not None:
         app.logger.debug('insert or update func ' + current_function['name'])
@@ -278,7 +279,11 @@ def head_or_tail(file_name, direction, n):
         return '\n File not found ' + file_name, 404
 
 def df_to_json(df):
-    return json.dumps(json.loads(df.to_json(orient='records')))
+    li = []
+    li.append(json.loads(df.to_json(orient='records')))
+    li.append(pandas_func.addDataTypeToHeader(df))
+    return json.dumps(li)
+    # return json.dumps(json.loads(df.to_json(orient='records')))
 
 # structure of steps would be linkedlist of Steps
 # [ [rename_column, old_column_name, new_column_name], [normalize, column_name] .... ]
@@ -295,10 +300,10 @@ def df_to_json(df):
 #             locals()[step.functionName](file_name)
 
 
-class FunctionStat(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    function_name = db.Column(db.String(100), nullable=False)
-    count =  db.Column(db.Integer, nullable=False)
+# class FunctionStat(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     function_name = db.Column(db.String(100), nullable=False)
+#     count =  db.Column(db.Integer, nullable=False)
     
-    def __repr__(self):
-        return f'<FunctionStat {self.function_name}>'
+#     def __repr__(self):
+#         return f'<FunctionStat {self.function_name}>'
