@@ -106,8 +106,6 @@ def value_editor(df, col_name, old_value, new_value):
 ### recommended n's (0.01 for 99% confidence)
 ###                 (0.05 for 95% confidence)
 ###                 (0.10 for 90% confidence)
-
-
 def quartile_trimmer(df, col_name, n):
     app.logger.info('Quartile trimmer %s %d', col_name, n)
     df = df.copy(deep=True)
