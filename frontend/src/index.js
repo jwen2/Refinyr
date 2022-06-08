@@ -1,19 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import './App.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./styles.css";
+import Header from "./Components/Header";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-bootstrap-submenu/dist/index.css";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-<div >
-  <h1 class="title"> Data Project </h1>
-  <h3 class="test">Transform your data with us.</h3>
-  </div>
+    <Header />
     <App />
-
   </React.StrictMode>
 );
 

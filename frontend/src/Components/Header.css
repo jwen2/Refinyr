@@ -1,0 +1,85 @@
+.headerContainer {
+  width: 100vw;
+  margin-bottom: 2vh;
+  margin-top: 2vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 85%;
+  height: 25px;
+  margin: 0 auto;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  margin-top: 2vh;
+}
+
+.menuItems {
+  font-size: 0.75em;
+  margin: 0 1rem;
+  color: black;
+  cursor: pointer;
+}
+
+.menuItems::after {
+  content: " ";
+  display: block;
+  width: 0%;
+  height: 1px;
+  background: black;
+  transition: width 0.3s ease;
+}
+.menuItems:hover:after {
+  width: 100%;
+}
+
+.headerButton {
+  display: inline-block;
+  background: rgb(138, 138, 138);
+  background: linear-gradient(
+    90deg,
+    rgba(138, 138, 138, 1) 0%,
+    rgba(91, 90, 90, 1) 35%,
+    rgba(195, 195, 195, 1) 100%
+  );
+  color: white;
+  outline: none;
+  border: none;
+
+  font-size: 0.775em;
+  padding: 0.5rem 2.3rem;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.headerButton:hover {
+  transform: scale(0.9);
+}
+
+.headerButton:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  border: 1px solid white;
+  width: 100%;
+  height: 100%;
+  border-radius: 50px;
+  transition: all 0.2s ease;
+}
+
+.headerButton:hover:after {
+  transform: translate(-50%, -50%) scale(1);
+  padding: 0.3rem;
+}

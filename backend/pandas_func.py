@@ -42,6 +42,7 @@ def remove_duplicates(df, col_name, method="first"):
 
 # """Remove nulls given a column index"""
 def remove_nulls(df, col_name):
+    app.logger.info('Remove nulls for column %s', col_name)
     if df[col_name].isna().values.any():
         df = df.dropna(subset=[col_name])
         return df
@@ -106,8 +107,6 @@ def value_editor(df, col_name, old_value, new_value):
 ### recommended n's (0.01 for 99% confidence)
 ###                 (0.05 for 95% confidence)
 ###                 (0.10 for 90% confidence)
-
-
 def quartile_trimmer(df, col_name, n):
     app.logger.info('Quartile trimmer %s %d', col_name, n)
     df = df.copy(deep=True)

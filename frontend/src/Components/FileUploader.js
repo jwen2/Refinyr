@@ -2,7 +2,13 @@ import React, { Fragment, useState } from "react";
 import axios from "axios";
 import "../App.css";
 
-const FileUploader = ({ setRowData, setColumnDefs, filename, setFilename }) => {
+const FileUploader = ({
+  setRowData,
+  setColumnDefs,
+  filename,
+  setFilename,
+  onBtnExport,
+}) => {
   const [file, setFile] = useState("");
   const [uploadedFile, setUploadedFile] = useState({});
 
@@ -64,7 +70,7 @@ const FileUploader = ({ setRowData, setColumnDefs, filename, setFilename }) => {
   return (
     <>
       <form onSubmit={onSubmit}>
-        <div className="div center">
+        <div className="fileUploader">
           <input
             type="file"
             className="custom-file-input"
@@ -75,8 +81,20 @@ const FileUploader = ({ setRowData, setColumnDefs, filename, setFilename }) => {
             {filename}
           </label> */}
         </div>
-        <div className="div left">
-          <input type="submit" value="Upload" className="button" />
+        <div className="fileUploaderBtns">
+          <input
+            type="submit"
+            value="Upload"
+            className="headerButton"
+            style={{ fontSize: "0.65em" }}
+          />
+          <button
+            className="headerButton"
+            style={{ fontSize: "0.65em" }}
+            onClick={onBtnExport}
+          >
+            Download CSV
+          </button>
         </div>
       </form>
     </>

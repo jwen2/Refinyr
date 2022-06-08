@@ -61,10 +61,7 @@
 }
 
 body {
-  background-color: #92d293;
-  height: 100vh; /* Magic here */
-  display: flex;
-  justify-content: center;
+  background-color: #92d293; /* Magic here */
 }
 
 .title {
@@ -73,7 +70,7 @@ body {
   text-align: "center";
   font-family: "Courier New", Courier, monospace;
   font-style: normal;
-  color: white;
+  color: black;
   font-size: 250%;
   position: relative;
   opacity: 0;
@@ -86,7 +83,14 @@ body {
 .custom-file-input::before {
   content: "Select a file";
   display: inline-block;
-  background: white;
+  background: rgb(138, 138, 138);
+  background: linear-gradient(
+    90deg,
+    rgba(138, 138, 138, 1) 0%,
+    rgba(91, 90, 90, 1) 35%,
+    rgba(195, 195, 195, 1) 100%
+  );
+  color: white;
   border: 1px solid #999;
   border-radius: 3px;
   padding: 5px 8px;
@@ -94,39 +98,29 @@ body {
   white-space: nowrap;
   -webkit-user-select: none;
   cursor: pointer;
-  text-shadow: 1px 1px #fff;
-  font-weight: 700;
+
   font-size: 10pt;
   display: flex;
   justify-content: center;
 }
-.custom-file-input:hover::before {
+.custom-file-input:hover {
   border-color: black;
 }
 .custom-file-input:active::before {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
-.div.center {
+.fileUploader {
   display: flex;
   justify-content: center;
 }
 
-.divider {
-  color: #c5d1f3;
-  background-color: #c5d1f3;
-  height: 2px;
-}
-.div.right {
-  /* justify-content: right;
-  display:inline-block; */
-  /* float:right; */
+.fileUploaderBtns {
+  display: flex;
+  justify-content: center;
 }
 
-.div.left {
-  /* justify-content: left; */
-  /* display:inline-block; */
-  float: left;
-  width: 772px;
+.fileUploaderBtns * {
+  margin: 0.5rem;
 }
 
 .test {
@@ -221,32 +215,20 @@ body {
 }
 
 .pageContainer {
-  min-height: 100vh;
+  min-height: 90vh;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
   overflow: hidden;
-}
-
-.mainContainer {
-  background-color: #dfdfdf;
-  padding: 10px;
-  width: 80vw;
-  display: flex;
-  flex-directon: row;
-  justify-content: space-between;
-  align-content: center;
-  flex-wrap: wrap;
-  border-radius: 10px;
+  background-color: #f1f5f9;
+  padding-top: 2rem;
 }
 
 .gridContainer {
   display: flex;
-  flex: 2;
-  width: 80vw;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .menuContainer {
@@ -276,4 +258,27 @@ body {
 
 .selectMenu {
   margin-bottom: 0.5rem;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer {
+  height: 10vh;
+  position: absolute;
+
+  top: 90%;
+  width: 100vw;
+  background: rgb(138, 138, 138);
+  background: linear-gradient(
+    90deg,
+    rgba(138, 138, 138, 1) 0%,
+    rgba(91, 90, 90, 1) 35%,
+    rgba(195, 195, 195, 1) 100%
+  );
 }

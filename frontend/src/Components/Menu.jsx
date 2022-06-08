@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Select from "react-select";
+import { NavDropdown, Navbar, Nav, Row } from "react-bootstrap";
+import { DropdownSubmenu, NavDropdownMenu } from "react-bootstrap-submenu";
+import "./Menu.css";
 
 const Menu = ({
   fileSelected,
@@ -68,9 +71,159 @@ const Menu = ({
   };
 
   return (
-    <div className="menuContainer">
-      <h3 className="optionTitle">Transform:</h3>
-      {!fileSelected ? (
+    <>
+      <div className="optionsContainer">
+        <p>Transform:</p>
+
+        <Navbar
+          collapseOnSelect
+          bg="dark"
+          variant="dark"
+          style={{ height: "3vh" }}
+        >
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <NavDropdownMenu
+                title="Options"
+                id="collasible-nav-dropdown"
+                alignRight
+              >
+                {/* Numeric */}
+                <DropdownSubmenu href="#action/3.7" title="Numeric">
+                  <DropdownSubmenu href="#action/3.7" title="Treating Nulls">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu
+                    href="#action/3.7"
+                    title="Treating Duplicates"
+                  >
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Transformations">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Rename">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Find and Replace">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                </DropdownSubmenu>
+
+                {/* Categorical */}
+                <DropdownSubmenu href="#action/3.7" title="Categorical">
+                  <DropdownSubmenu href="#action/3.7" title="Treating Nulls">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu
+                    href="#action/3.7"
+                    title="Treating Duplicates"
+                  >
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Transformations">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Rename">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Find and Replace">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                </DropdownSubmenu>
+
+                {/* Date */}
+
+                <DropdownSubmenu href="#action/3.7" title="Date">
+                  <DropdownSubmenu href="#action/3.7" title="Treating Nulls">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu
+                    href="#action/3.7"
+                    title="Treating Duplicates"
+                  >
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Transformations">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Rename">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Find and Replace">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                </DropdownSubmenu>
+
+                {/* Text */}
+
+                <DropdownSubmenu href="#action/3.7" title="Text">
+                  <DropdownSubmenu href="#action/3.7" title="Treating Nulls">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu
+                    href="#action/3.7"
+                    title="Treating Duplicates"
+                  >
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Transformations">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Rename">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Find and Replace">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                </DropdownSubmenu>
+              </NavDropdownMenu>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+
+        {/* {!fileSelected ? (
         ""
       ) : (
         <div className="menuInnerContainer">
@@ -88,9 +241,9 @@ const Menu = ({
             Transform
           </button>
         </div>
-      )}
-    </div>
+      )} */}
+      </div>
+    </>
   );
 };
-
 export default Menu;
