@@ -1,7 +1,7 @@
 from sklearn import preprocessing
 import pandas as pd
 import os
-import matplotlib as mb
+# import matplotlib as mb
 from flask import current_app as app
 from scipy import stats
 
@@ -177,3 +177,12 @@ def remove_outliers(df, col_name):
 def histogram (df, col_name):
     app.logger.info('Histogram %s', col_name)
     return df[col_name].hist()
+
+
+def addDataTypeToHeader(df):
+    listOfDTypes = []
+    column_headers = list(df.columns)
+    for header in column_headers:
+        listOfDTypes.append(str(df[header].dtypes))
+    return listOfDTypes
+
