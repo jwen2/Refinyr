@@ -3,6 +3,7 @@ import pandas as pd
 import os
 # import matplotlib as mb
 from flask import current_app as app
+from scipy import stats
 
 def view_dataframe(df, direction, n):
     app.logger.info('View dataframe %s %d', direction, n)
@@ -106,8 +107,6 @@ def value_editor(df, col_name, old_value, new_value):
 ### recommended n's (0.01 for 99% confidence)
 ###                 (0.05 for 95% confidence)
 ###                 (0.10 for 90% confidence)
-
-
 def quartile_trimmer(df, col_name, n):
     app.logger.info('Quartile trimmer %s %d', col_name, n)
     df = df.copy(deep=True)
@@ -150,23 +149,35 @@ def dateTransformer(df, col_name, t):
 def transformer(df, col_name, x):
     app.logger.info('Transformer %s %s', col_name, x)
     df = df.copy(deep=True)
-    if df[col_name].dtypes == "int64":
-        if x == "squared":
-            df[col_name+"_squared"] = df[col_name] * df[col_name]
-            return (df)
-        if x == "log":
-            df[col_name+"_ln"] = np.log(df[col_name])
-            return (df)
-        if x == "root2":
-            df[col_name+"_root2"] = np.sqrt(df[col_name])
-            return (df)
+    if x == "squared":
+        df[col_name+"_squared"] = df[col_name] * df[col_name]
+        return (df)
+    if x == "log":
+        df[col_name+"_ln"] = np.log(df[col_name])
+        return (df)
+    if x == "root2":
+        df[col_name+"_root2"] = np.sqrt(df[col_name])
+        return (df)
     else:
-        return ("Can not apply transformation to none numeric column")
+        return "error"
+
+#have to import a new popular library scipy.
+#takes in a dataframe and a column
+#outputs updates the dataframe to remove the outlier rows from the dataframe
+#operates similar to remove duplicates, and remove nulls
+def remove_outliers(df, col_name):
+    z_scores = stats.zscore(df[col_name])
+    abs_z_scores = np.abs(z_scores)
+    filtered = (abs_z_scores < 3)
+    updated_df = df[filtered]
+    return updated_df
+
 
 
 def histogram (df, col_name):
     app.logger.info('Histogram %s', col_name)
     return df[col_name].hist()
+
 
 def addDataTypeToHeader(df):
     listOfDTypes = []
@@ -174,3 +185,4 @@ def addDataTypeToHeader(df):
     for header in column_headers:
         listOfDTypes.append(str(df[header].dtypes))
     return listOfDTypes
+
