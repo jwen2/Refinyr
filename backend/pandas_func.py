@@ -82,7 +82,7 @@ def replace_na_categorical(df, col_name, stat):
     return df
 
 # """"Normalize Column"""
-def normalize_column(df, col_name):
+def normalize(df, col_name):
     app.logger.info('Normalize column %s', col_name)
     df_max_scaled = df.copy()
     df_max_scaled[col_name] = df_max_scaled[col_name] /df_max_scaled[col_name].abs().max()
@@ -148,18 +148,15 @@ def dateTransformer(df, col_name, t):
 def transformer(df, col_name, x):
     app.logger.info('Transformer %s %s', col_name, x)
     df = df.copy(deep=True)
-    if df[col_name].dtypes == "int64":
-        if x == "squared":
-            df[col_name+"_squared"] = df[col_name] * df[col_name]
-            return (df)
-        if x == "log":
-            df[col_name+"_ln"] = np.log(df[col_name])
-            return (df)
-        if x == "root2":
-            df[col_name+"_root2"] = np.sqrt(df[col_name])
-            return (df)
-    else:
-        return ("Can not apply transformation to none numeric column")
+    if x == "squared":
+        df[col_name+"_squared"] = df[col_name] * df[col_name]
+        return (df)
+    if x == "log":
+        df[col_name+"_ln"] = np.log(df[col_name])
+        return (df)
+    if x == "root2":
+        df[col_name+"_root2"] = np.sqrt(df[col_name])
+        return (df)
 
 
 def histogram (df, col_name):

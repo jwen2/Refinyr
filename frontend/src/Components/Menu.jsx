@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import Select from "react-select";
-import { NavDropdown, Navbar, Nav, Row } from "react-bootstrap";
+import { NavDropdown, Navbar, Nav } from "react-bootstrap";
 import { DropdownSubmenu, NavDropdownMenu } from "react-bootstrap-submenu";
 import "./Menu.css";
 import { useEffect } from "react";
@@ -14,25 +13,6 @@ const Menu = ({
   setRowData,
 }) => {
   const [selection, setSelection] = useState("");
-
-  //can be replaced dynamic data with an async call
-  const options = [
-    { value: "rm_dups", label: "Remove Duplicates" },
-    { value: "rm_nulls", label: "Remove Nulls" },
-    { value: "replace_na_mean", label: "Replace NA with Mean" },
-    { value: "replace_na_median", label: "Replace NA with Median" },
-    { value: "replace_na_mode_numeric", label: "Replace NA with Mode Numeric" },
-    { value: "replace_na_unknown", label: "Replace NA with Unknown" },
-    { value: "replace_na_ffill", label: "Replace NA with ffill" },
-    { value: "replace_na_bfill", label: "Replace NA with bfill" },
-    {
-      value: "replace_na_mode_categorical",
-      label: "Replace NA with Mode Categorical",
-    },
-    //need to have pop up or something to input second value for rename column
-    //{ value: "rename_column", label: "Rename Column"},
-    { value: "normalize", label: "Normalize Column" },
-  ];
 
   useEffect(() => {
     if (filename && columnSelected && selection) {
@@ -144,14 +124,14 @@ const Menu = ({
                   <DropdownSubmenu href="#action/3.7" title="Transformations">
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("rm_nulls");
+                        handleSelect("normalize");
                       }}
                     >
                       Normalize
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("rm_nulls");
+                        handleSelect("normalize");
                       }}
                     >
                       <var>
