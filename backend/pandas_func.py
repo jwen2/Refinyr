@@ -172,7 +172,16 @@ def remove_outliers(df, col_name):
     updated_df = df[filtered]
     return updated_df
 
-
+def changedatatype(df, col_name, t):
+    if t == "to_date":
+        df[col_name] = pd.to_datetime(df[col_name])
+        return df
+    if t == "cat_to_int":
+        df[col_name] = pd.to_numeric(df[col_name], errors='coerce')
+        return df
+    if t == "int_to_cat":
+        df[col_name] = df[col_name].astype(str)
+        return df
 
 def histogram (df, col_name):
     app.logger.info('Histogram %s', col_name)
