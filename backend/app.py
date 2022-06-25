@@ -16,7 +16,8 @@ from sqlalchemy.sql import func
 
 app = Flask(__name__)
 CORS(app)
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+#Max upload 50GB
+app.config['MAX_CONTENT_LENGTH'] = 1000 * 1000 * 50
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 #Path where test csv files are stored
 app.config['UPLOAD_PATH'] = '../csv'
