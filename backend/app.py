@@ -258,12 +258,12 @@ def normalize(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/quartile_trimmer/<string:file_name>/<string:column_name/<float:n>')
-def quartile_trimmer(file_name, column_name, n):
-    try: 
-        df = datastore.get_df(file_name);
-        json = pandas_func.quartile_trimmer(df, column_name, n)
-        datastore.lpush(file_name, 'quartile_trimmer:' + column_name + ':' + n, df)
+# @app.route('/pandas/quartile_trimmer/<string:file_name>/<string:column_name/<float:n>')
+# def quartile_trimmer(file_name, column_name, n):
+#     try: 
+#         df = datastore.get_df(file_name);
+#         json = pandas_func.quartile_trimmer(df, column_name, n)
+#         datastore.lpush(file_name, 'quartile_trimmer:' + column_name + ':' + n, df)
         
 @app.route('/pandas/do_math/<string:file_name>/<string:column_name>/<string:function_name>')
 def do_math(file_name, column_name, function_name):
@@ -278,7 +278,7 @@ def do_math(file_name, column_name, function_name):
         return '\n File not found ' + file_name, 404
 
 
-@app.route('/pandas/date_transformer/<string:file_name/<string:column_name/<string:type>')
+@app.route('/pandas/date_transformer/<string:file_name>/<string:column_name>/<string:type>')
 def date_transformer(file_name, column_name, type):
     try: 
         df = datastore.get_df(file_name);
@@ -290,7 +290,7 @@ def date_transformer(file_name, column_name, type):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/transformer/<string:file_name/<string:column_name/<string:x>')
+@app.route('/pandas/transformer/<string:file_name>/<string:column_name>/<string:x>')
 def transformer(file_name, column_name, x):
     try: 
         df = datastore.get_df(file_name);
