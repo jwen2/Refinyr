@@ -2,6 +2,7 @@ from flask import Flask, request, abort, send_from_directory, jsonify, g
 from io import StringIO
 from werkzeug.wrappers import Response
 from flask_cors import CORS
+import os
 from os import walk, path, remove
 import pandas_func
 import datastore
@@ -15,13 +16,14 @@ from sqlalchemy.sql import func
 
 app = Flask(__name__)
 CORS(app)
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+#Max upload 50GB
+app.config['MAX_CONTENT_LENGTH'] = 1000 * 1000 * 50
 app.config['UPLOAD_EXTENSIONS'] = ['.csv']
 #Path where test csv files are stored
 app.config['UPLOAD_PATH'] = '../csv'
 app.config['MAX_HEADER_ROWS'] = 1000
 
-#In memory db setup
+# In memory db setup
 basedir = path.abspath(path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + path.join(basedir, 'database.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -48,7 +50,7 @@ def after_request(response):
     app.logger.debug('after_request')
     return response
 
-#todo should just be update...create a init.sql file and populate table on start up
+# todo should just be update...create a init.sql file and populate table on start up
 def insert_or_update(current_function):
     if current_function.get('name') is not None:
         app.logger.debug('insert or update func ' + current_function['name'])
@@ -257,6 +259,13 @@ def normalize(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
+@app.route('/pandas/quartile_trimmer/<string:file_name>/<string:column_name/<float:n>')
+def quartile_trimmer(file_name, column_name, n):
+    try: 
+        df = datastore.get_df(file_name);
+        json = pandas_func.quartile_trimmer(df, column_name, n)
+        datastore.lpush(file_name, 'quartile_trimmer:' + column_name + ':' + n, df)
+        
 @app.route('/pandas/do_math/<string:file_name>/<string:column_name>/<string:function_name>')
 def do_math(file_name, column_name, function_name):
     try:
@@ -275,6 +284,18 @@ def change_data_type(file_name, column_name, t):
         df = datastore.get_df(file_name)
         df = pandas_func.change_data_type(df, column_name, t)
         datastore.lpush(file_name, 'change_data_type:' + column_name + ':' + t, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/date_transformer/<string:file_name/<string:column_name/<string:type>')
+def date_transformer(file_name, column_name, type):
+    try: 
+        df = datastore.get_df(file_name);
+        json = pandas_func.dateTransformer(df, column_name, type)
+        datastore.lpush(file_name, 'date_transformer:' + column_name + ':' + type, df)
         return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -302,7 +323,11 @@ def head_or_tail(file_name, direction, n):
         return '\n File not found ' + file_name, 404
 
 def df_to_json(df):
-    return json.dumps(json.loads(df.to_json(orient='records')))
+    li = []
+    li.append(json.loads(df.to_json(orient='records')))
+    li.append(pandas_func.addDataTypeToHeader(df))
+    return json.dumps(li)
+    # return json.dumps(json.loads(df.to_json(orient='records')))
 
 # structure of steps would be linkedlist of Steps
 # [ [rename_column, old_column_name, new_column_name], [normalize, column_name] .... ]
