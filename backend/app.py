@@ -270,7 +270,7 @@ def quartile_trimmer(file_name, column_name, n):
 def do_math(file_name, column_name, function_name):
     try:
         df = datastore.get_df(file_name)
-        df = pandas_func.transformer(df, col_name, function_name)
+        df = pandas_func.transformer(df, column_name, function_name)
         datastore.lpush(file_name, 'do_math:' + column_name + ':' + function_name, df)
         return df_to_json(df), 200
     except KeyError:
@@ -278,6 +278,17 @@ def do_math(file_name, column_name, function_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
+@app.route('/pandas/change_data_type/<string:file_name>/<string:column_name>/<string:t>')
+def change_data_type(file_name, column_name, t):
+    try:
+        df = datastore.get_df(file_name)
+        df = pandas_func.change_data_type(df, column_name, t)
+        datastore.lpush(file_name, 'change_data_type:' + column_name + ':' + t, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
 
 @app.route('/pandas/date_transformer/<string:file_name/<string:column_name/<string:type>')
 def date_transformer(file_name, column_name, type):
@@ -290,19 +301,7 @@ def date_transformer(file_name, column_name, type):
         return "\n Invalid column name.", 404
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
-
-@app.route('/pandas/transformer/<string:file_name/<string:column_name/<string:x>')
-def transformer(file_name, column_name, x):
-    try: 
-        df = datastore.get_df(file_name);
-        json = pandas_func.transformer(df, column_name, x)
-        datastore.lpush(file_name, 'transformer:' + column_name + ':' + x, df)
-        return df_to_json(df), 200
-    except KeyError:
-        return "\n Invalid column name.", 404
-    except FileNotFoundError:
-        return '\n File not found ' + file_name, 404
-
+        
 @app.errorhandler(413)
 def too_large(e):
     return "\nFile is too large", 413
