@@ -172,7 +172,7 @@ def remove_outliers(df, col_name):
     updated_df = df[filtered]
     return updated_df
 
-def changedatatype(df, col_name, t):
+def change_data_type(df, col_name, t):
     if t == "to_date":
         df[col_name] = pd.to_datetime(df[col_name])
         return df
