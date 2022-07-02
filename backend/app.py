@@ -259,7 +259,7 @@ def normalize(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/quartile_trimmer/<string:file_name>/<string:column_name/<float:n>')
+@app.route('/pandas/quartile_trimmer/<string:file_name>/<string:column_name>/<float:n>')
 def quartile_trimmer(file_name, column_name, n):
     try: 
         df = datastore.get_df(file_name);
@@ -332,7 +332,7 @@ def change_data_type_cat_to_int(file_name, column_name):
         return '\n File not found ' + file_name, 404
 
 @app.route('/pandas/change_data_type_int_to_cat/<string:file_name>/<string:column_name>')
-def change_data_type_to_date(file_name, column_name):
+def change_data_type_int_to_cat(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
         df = pandas_func.change_data_type(df, column_name, "int_to_cat")
@@ -343,7 +343,7 @@ def change_data_type_to_date(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/date_transformer_day/<string:file_name/<string:column_name')
+@app.route('/pandas/date_transformer_day/<string:file_name>/<string:column_name>')
 def date_transformer_day(file_name, column_name):
     try: 
         df = datastore.get_df(file_name);
@@ -355,7 +355,7 @@ def date_transformer_day(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/date_transformer_month/<string:file_name/<string:column_name')
+@app.route('/pandas/date_transformer_month/<string:file_name>/<string:column_name>')
 def date_transformer_month(file_name, column_name):
     try: 
         df = datastore.get_df(file_name);
@@ -367,7 +367,7 @@ def date_transformer_month(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/date_transformer_year/<string:file_name/<string:column_name')
+@app.route('/pandas/date_transformer_year/<string:file_name>/<string:column_name>')
 def date_transformer_year(file_name, column_name):
     try: 
         df = datastore.get_df(file_name);
@@ -379,7 +379,7 @@ def date_transformer_year(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/date_transformer_quarter/<string:file_name/<string:column_name')
+@app.route('/pandas/date_transformer_quarter/<string:file_name>/<string:column_name>')
 def date_transformer_quarter(file_name, column_name):
     try: 
         df = datastore.get_df(file_name);
@@ -391,7 +391,7 @@ def date_transformer_quarter(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/date_transformer_day_of_week/<string:file_name/<string:column_name')
+@app.route('/pandas/date_transformer_day_of_week/<string:file_name>/<string:column_name>')
 def date_transformer_day_of_week(file_name, column_name):
     try: 
         df = datastore.get_df(file_name);
@@ -403,7 +403,7 @@ def date_transformer_day_of_week(file_name, column_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/date_transformer_weekday/<string:file_name/<string:column_name')
+@app.route('/pandas/date_transformer_weekday/<string:file_name>/<string:column_name>')
 def date_transformer_weekday(file_name, column_name):
     try: 
         df = datastore.get_df(file_name);
