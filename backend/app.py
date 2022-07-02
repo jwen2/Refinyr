@@ -265,6 +265,11 @@ def quartile_trimmer(file_name, column_name, n):
         df = datastore.get_df(file_name);
         json = pandas_func.quartile_trimmer(df, column_name, n)
         datastore.lpush(file_name, 'quartile_trimmer:' + column_name + ':' + n, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
         
 @app.route('/pandas/do_math/<string:file_name>/<string:column_name>/<string:function_name>')
 def do_math(file_name, column_name, function_name):
@@ -278,12 +283,36 @@ def do_math(file_name, column_name, function_name):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
 
-@app.route('/pandas/change_data_type/<string:file_name>/<string:column_name>/<string:t>')
-def change_data_type(file_name, column_name, t):
+@app.route('/pandas/change_data_type_to_date/<string:file_name>/<string:column_name>')
+def change_data_type_to_date(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        df = pandas_func.change_data_type(df, column_name, t)
-        datastore.lpush(file_name, 'change_data_type:' + column_name + ':' + t, df)
+        df = pandas_func.change_data_type(df, column_name, "to_date")
+        datastore.lpush(file_name, 'change_data_type_to_date:' + column_name, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/change_data_type_cat_to_int/<string:file_name>/<string:column_name>')
+def change_data_type_cat_to_int(file_name, column_name):
+    try:
+        df = datastore.get_df(file_name)
+        df = pandas_func.change_data_type(df, column_name, "cat_to_int")
+        datastore.lpush(file_name, 'change_data_type_cat_to_int:' + column_name, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/change_data_type_int_to_cat/<string:file_name>/<string:column_name>')
+def change_data_type_to_date(file_name, column_name):
+    try:
+        df = datastore.get_df(file_name)
+        df = pandas_func.change_data_type(df, column_name, "int_to_cat")
+        datastore.lpush(file_name, 'change_data_type_int_to_cat:' + column_name, df)
         return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
