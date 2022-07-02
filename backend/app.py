@@ -271,12 +271,36 @@ def quartile_trimmer(file_name, column_name, n):
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
         
-@app.route('/pandas/do_math/<string:file_name>/<string:column_name>/<string:function_name>')
-def do_math(file_name, column_name, function_name):
+@app.route('/pandas/transformer_squared/<string:file_name>/<string:column_name>')
+def transformer_squared(file_name, column_name):
     try:
         df = datastore.get_df(file_name)
-        df = pandas_func.transformer(df, column_name, function_name)
-        datastore.lpush(file_name, 'do_math:' + column_name + ':' + function_name, df)
+        df = pandas_func.transformer(df, column_name, "squared")
+        datastore.lpush(file_name, 'transformer_squared:' + column_name, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/transformer_log/<string:file_name>/<string:column_name>')
+def transformer_log(file_name, column_name):
+    try:
+        df = datastore.get_df(file_name)
+        df = pandas_func.transformer(df, column_name, "log")
+        datastore.lpush(file_name, 'transformer_log:' + column_name, df)
+        return df_to_json(df), 200
+    except KeyError:
+        return "\n Invalid column name.", 404
+    except FileNotFoundError:
+        return '\n File not found ' + file_name, 404
+
+@app.route('/pandas/transformer_root2/<string:file_name>/<string:column_name>')
+def transformer_root2(file_name, column_name):
+    try:
+        df = datastore.get_df(file_name)
+        df = pandas_func.transformer(df, column_name, "root2")
+        datastore.lpush(file_name, 'transformer_root2:' + column_name, df)
         return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404
@@ -390,7 +414,7 @@ def date_transformer_weekday(file_name, column_name):
         return "\n Invalid column name.", 404
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404
-        
+
 @app.errorhandler(413)
 def too_large(e):
     return "\nFile is too large", 413
