@@ -270,7 +270,7 @@ def normalize(file_name, column_name):
 def do_math(file_name, column_name, function_name):
     try:
         df = datastore.get_df(file_name)
-        df = pandas_func.transformer(df, col_name, function_name)
+        df = pandas_func.transformer(df, column_name, function_name)
         datastore.lpush(file_name, 'do_math:' + column_name + ':' + function_name, df)
         return df_to_json(df), 200
     except KeyError:

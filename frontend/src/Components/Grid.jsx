@@ -38,13 +38,12 @@ const Grid = () => {
       );
       console.log(data);
       setRowData(data[0]);
-      console.log(data[0][0]);
-      //getting keys for columndefs based on the first element in the row data
+
       let keys = Object.keys(data[0][0]).map((key) => ({
         field: key,
         headerName: key[0].toUpperCase() + key.slice(1),
         editable: true,
-        // sortable: true,
+        sortable: true,
         resizable: true,
         cellStyle: (params) => {
           if (params.colDef.field === attribute) {
@@ -67,12 +66,14 @@ const Grid = () => {
 
   //clicking on columns
   const headerClickListener = async () => {
+    console.log("clicked once");
     const colElements = Array.from(
       document.getElementsByClassName("ag-header-cell")
     );
 
     colElements.forEach((elem, i) => {
       elem.addEventListener("click", () => {
+        console.log("clicked once");
         let attribute = elem.getAttribute("col-id");
         console.log(attribute);
         setAttribute(attribute);
@@ -132,8 +133,8 @@ const Grid = () => {
           className="ag-theme-alpine"
           onClick={headerClickListener}
           style={{
-            height: 450,
-            width: "70%",
+            height: "60vh",
+            width: "80vw",
           }}
         >
           <AgGridReact
