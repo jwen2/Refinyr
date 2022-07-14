@@ -52,9 +52,13 @@ const Grid = () => {
           return null;
         },
       }));
+
       keys.forEach((key, i) => {
         key["columnType"] = data[1][i];
       });
+
+      headerClickListener();
+
       setDataTypes(data[1]);
       console.log(data[1]);
       console.log(keys);
@@ -73,14 +77,13 @@ const Grid = () => {
 
     colElements.forEach((elem, i) => {
       elem.addEventListener("click", () => {
-        console.log("clicked once");
+        console.log("clicked twice");
         let attribute = elem.getAttribute("col-id");
         console.log(attribute);
         setAttribute(attribute);
         setCurrentType(dataTypes[i]);
         console.log(dataTypes);
         console.log(dataTypes[i]);
-        //need to look into putting this on when a column is selected (bug where if you click two columns it doesn't work)
         console.log(filename);
         if (filename !== null || filename !== "Choose File")
           setfileSelected(true);
@@ -133,8 +136,10 @@ const Grid = () => {
           className="ag-theme-alpine"
           onClick={headerClickListener}
           style={{
-            height: "60vh",
-            width: "80vw",
+            height: "80%",
+            width: "80%",
+            "overflow-x": "scroll",
+            "white-space": "nowrap",
           }}
         >
           <AgGridReact
@@ -142,6 +147,7 @@ const Grid = () => {
             pagination={true}
             columnDefs={columnDefs}
             rowData={rowData}
+            alwaysShowHorizontalScroll={true}
           />
         </div>
       </div>

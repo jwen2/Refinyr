@@ -28,3 +28,9 @@
   color: white;
   background-color: black;
 }
+
+.typeFont {
+  font-family: system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: bold;
+}

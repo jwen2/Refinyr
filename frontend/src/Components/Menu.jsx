@@ -43,7 +43,7 @@ const Menu = ({
         field: key,
         headerName: key[0].toUpperCase() + key.slice(1),
         editable: true,
-        sortable: true,
+        // sortable: true,
         resizable: true,
         cellStyle: (params) => {
           if (params.colDef.field === attribute) {
@@ -67,13 +67,13 @@ const Menu = ({
   return (
     <>
       <div className="optionsContainer">
-        <p>Column Type: {currentType}</p>
+        <p className="typeFont">Column Type: {currentType}</p>
         {currentType === "int64" ? (
           <Navbar
             collapseOnSelect
             bg="dark"
             variant="dark"
-            style={{ height: "3vh" }}
+            style={{ height: "2.5vh", marginBottom: "1.2em" }}
           >
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
@@ -83,132 +83,121 @@ const Menu = ({
                   id="collasible-nav-dropdown"
                   alignRight
                 >
-                  <DropdownSubmenu title="Numeric">
-                    <DropdownSubmenu title="Treating Nulls">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Remove nulls
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_mean");
-                        }}
-                      >
-                        Replace with mean
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_median");
-                        }}
-                      >
-                        Replace with median
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_mode_numeric");
-                        }}
-                      >
-                        Replace with mode
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_ffill");
-                        }}
-                      >
-                        Replace with forward fill
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_bfill");
-                        }}
-                      >
-                        Replace with back fill
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu title="Treating Duplicates">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_dups");
-                        }}
-                      >
-                        Remove duplicates
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu href="#action/3.7" title="Transformations">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("normalize");
-                        }}
-                      >
-                        Normalize
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("squared");
-                        }}
-                      >
-                        <var>
-                          X<sup>2</sup>
-                        </var>
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("squared");
-                        }}
-                      >
-                        ln(x)
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Square Root
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Trim Quantiles
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu
-                      href="#action/3.7"
-                      title="Treating Outliers"
-                    >
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Remove outliers
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu href="#action/3.7" title="Rename">
-                      <NavDropdown.Item href="#action/9.1">
-                        Sub 2
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu
-                      href="#action/3.7"
-                      title="Find and Replace"
-                    >
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Sub 2
-                      </NavDropdown.Item>
-                      onClick=
-                      {() => {
+                  <DropdownSubmenu title="Treating Nulls">
+                    <NavDropdown.Item
+                      onClick={() => {
                         handleSelect("rm_nulls");
                       }}
-                    </DropdownSubmenu>
+                    >
+                      Remove nulls
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_mean");
+                      }}
+                    >
+                      Replace with mean
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_median");
+                      }}
+                    >
+                      Replace with median
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_mode_numeric");
+                      }}
+                    >
+                      Replace with mode
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_ffill");
+                      }}
+                    >
+                      Replace with forward fill
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_bfill");
+                      }}
+                    >
+                      Replace with back fill
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Treating Duplicates">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("rm_dups");
+                      }}
+                    >
+                      Remove duplicates
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Transformations">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("normalize");
+                      }}
+                    >
+                      Normalize
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("squared");
+                      }}
+                    >
+                      <var>
+                        X<sup>2</sup>
+                      </var>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("log");
+                      }}
+                    >
+                      ln(x)
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("root2");
+                      }}
+                    >
+                      Square Root
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("quartile_trimmer");
+                      }}
+                    >
+                      Trim Quantiles
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Treating Outliers">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("");
+                      }}
+                    >
+                      Remove outliers
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Rename">
+                    <NavDropdown.Item>Sub 2</NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Find and Replace">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("");
+                      }}
+                    >
+                      Sub 2
+                    </NavDropdown.Item>
+                    {() => {
+                      handleSelect("");
+                    }}
                   </DropdownSubmenu>
                 </NavDropdownMenu>
               </Nav>
@@ -233,132 +222,124 @@ const Menu = ({
                   id="collasible-nav-dropdown"
                   alignRight
                 >
-                  <DropdownSubmenu title="Numeric">
-                    <DropdownSubmenu title="Treating Nulls">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Remove nulls
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_mean");
-                        }}
-                      >
-                        Replace with mean
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_median");
-                        }}
-                      >
-                        Replace with median
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_mode_numeric");
-                        }}
-                      >
-                        Replace with mode
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_ffill");
-                        }}
-                      >
-                        Replace with forward fill
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_bfill");
-                        }}
-                      >
-                        Replace with back fill
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu title="Treating Duplicates">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_dups");
-                        }}
-                      >
-                        Remove duplicates
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu href="#action/3.7" title="Transformations">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("normalize");
-                        }}
-                      >
-                        Normalize
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("normalize");
-                        }}
-                      >
-                        <var>
-                          X<sup>2</sup>
-                        </var>
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        ln(x)
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Square Root
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Trim Quantiles
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu
-                      href="#action/3.7"
-                      title="Treating Outliers"
-                    >
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Remove outliers
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu href="#action/3.7" title="Rename">
-                      <NavDropdown.Item href="#action/9.1">
-                        Sub 2
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu
-                      href="#action/3.7"
-                      title="Find and Replace"
-                    >
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Sub 2
-                      </NavDropdown.Item>
-                      onClick=
-                      {() => {
+                  <DropdownSubmenu title="Treating Nulls">
+                    <NavDropdown.Item
+                      onClick={() => {
                         handleSelect("rm_nulls");
                       }}
-                    </DropdownSubmenu>
+                    >
+                      Remove nulls
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_mean");
+                      }}
+                    >
+                      Replace with mean
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_median");
+                      }}
+                    >
+                      Replace with median
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_mode_numeric");
+                      }}
+                    >
+                      Replace with mode
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_ffill");
+                      }}
+                    >
+                      Replace with forward fill
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_bfill");
+                      }}
+                    >
+                      Replace with back fill
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Treating Duplicates">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("rm_dups");
+                      }}
+                    >
+                      Remove duplicates
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Transformations">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("normalize");
+                      }}
+                    >
+                      Normalize
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("squared");
+                      }}
+                    >
+                      <var>
+                        X<sup>2</sup>
+                      </var>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("log");
+                      }}
+                    >
+                      ln(x)
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("root2");
+                      }}
+                    >
+                      Square Root
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("");
+                      }}
+                    >
+                      Trim Quantiles
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Treating Outliers">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("");
+                      }}
+                    >
+                      Remove outliers
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Rename">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Find and Replace">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("");
+                      }}
+                    >
+                      Sub 2
+                    </NavDropdown.Item>
+                    onClick=
+                    {() => {
+                      handleSelect("");
+                    }}
                   </DropdownSubmenu>
                 </NavDropdownMenu>
               </Nav>
@@ -383,132 +364,124 @@ const Menu = ({
                   id="collasible-nav-dropdown"
                   alignRight
                 >
-                  <DropdownSubmenu title="Categorical">
-                    <DropdownSubmenu title="Treating Nulls">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Remove nulls
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_mean");
-                        }}
-                      >
-                        Replace with mean
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_median");
-                        }}
-                      >
-                        Replace with median
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_mode_numeric");
-                        }}
-                      >
-                        Replace with mode
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_ffill");
-                        }}
-                      >
-                        Replace with forward fill
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("replace_na_bfill");
-                        }}
-                      >
-                        Replace with back fill
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu title="Treating Duplicates">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_dups");
-                        }}
-                      >
-                        Remove duplicates
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu href="#action/3.7" title="Transformations">
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("normalize");
-                        }}
-                      >
-                        Normalize
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("normalize");
-                        }}
-                      >
-                        <var>
-                          X<sup>2</sup>
-                        </var>
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        ln(x)
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Square Root
-                      </NavDropdown.Item>
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Trim Quantiles
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu
-                      href="#action/3.7"
-                      title="Treating Outliers"
-                    >
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Remove outliers
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu href="#action/3.7" title="Rename">
-                      <NavDropdown.Item href="#action/9.1">
-                        Sub 2
-                      </NavDropdown.Item>
-                    </DropdownSubmenu>
-                    <DropdownSubmenu
-                      href="#action/3.7"
-                      title="Find and Replace"
-                    >
-                      <NavDropdown.Item
-                        onClick={() => {
-                          handleSelect("rm_nulls");
-                        }}
-                      >
-                        Sub 2
-                      </NavDropdown.Item>
-                      onClick=
-                      {() => {
+                  <DropdownSubmenu title="Treating Nulls">
+                    <NavDropdown.Item
+                      onClick={() => {
                         handleSelect("rm_nulls");
                       }}
-                    </DropdownSubmenu>
+                    >
+                      Remove nulls
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_mean");
+                      }}
+                    >
+                      Replace with mean
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_median");
+                      }}
+                    >
+                      Replace with median
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_mode_numeric");
+                      }}
+                    >
+                      Replace with mode
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_ffill");
+                      }}
+                    >
+                      Replace with forward fill
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("replace_na_bfill");
+                      }}
+                    >
+                      Replace with back fill
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Treating Duplicates">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("rm_dups");
+                      }}
+                    >
+                      Remove duplicates
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Transformations">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("normalize");
+                      }}
+                    >
+                      Normalize
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("squared");
+                      }}
+                    >
+                      <var>
+                        X<sup>2</sup>
+                      </var>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("log");
+                      }}
+                    >
+                      ln(x)
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("root2");
+                      }}
+                    >
+                      Square Root
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("");
+                      }}
+                    >
+                      Trim Quantiles
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Treating Outliers">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("");
+                      }}
+                    >
+                      Remove outliers
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Rename">
+                    <NavDropdown.Item href="#action/9.1">
+                      Sub 2
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu href="#action/3.7" title="Find and Replace">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("");
+                      }}
+                    >
+                      Sub 2
+                    </NavDropdown.Item>
+                    onClick=
+                    {() => {
+                      handleSelect("");
+                    }}
                   </DropdownSubmenu>
                 </NavDropdownMenu>
               </Nav>
