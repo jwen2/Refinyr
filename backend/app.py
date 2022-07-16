@@ -313,6 +313,7 @@ def change_data_type_to_date(file_name, column_name):
         df = datastore.get_df(file_name)
         df = pandas_func.change_data_type(df, column_name, "to_date")
         datastore.lpush(file_name, 'change_data_type_to_date:' + column_name, df)
+        print(df_to_json(df))
         return df_to_json(df), 200
     except KeyError:
         return "\n Invalid column name.", 404

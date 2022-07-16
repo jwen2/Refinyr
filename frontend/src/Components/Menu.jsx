@@ -26,9 +26,6 @@ const Menu = ({
   };
 
   const handleClick = async (selection) => {
-    console.log(filename);
-    console.log(columnSelected);
-    console.log(selection);
     try {
       const { data } = await axios.get(
         `http://127.0.0.1:5000/pandas/${selection}/${filename}/${columnSelected}`,
@@ -127,6 +124,7 @@ const Menu = ({
                       Replace with back fill
                     </NavDropdown.Item>
                   </DropdownSubmenu>
+
                   <DropdownSubmenu title="Treating Duplicates">
                     <NavDropdown.Item
                       onClick={() => {
@@ -146,7 +144,7 @@ const Menu = ({
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("squared");
+                        handleSelect("transformer_squared");
                       }}
                     >
                       <var>
@@ -155,14 +153,14 @@ const Menu = ({
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("log");
+                        handleSelect("transformer_log");
                       }}
                     >
                       ln(x)
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("root2");
+                        handleSelect("transformer_root2");
                       }}
                     >
                       Square Root
@@ -175,6 +173,7 @@ const Menu = ({
                       Trim Quantiles
                     </NavDropdown.Item>
                   </DropdownSubmenu>
+
                   <DropdownSubmenu title="Treating Outliers">
                     <NavDropdown.Item
                       onClick={() => {
@@ -184,6 +183,24 @@ const Menu = ({
                       Remove outliers
                     </NavDropdown.Item>
                   </DropdownSubmenu>
+
+                  <DropdownSubmenu title="Change Data Type">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("change_data_type_to_date");
+                      }}
+                    >
+                      Numeric to Date
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("change_data_type_int_to_cat");
+                      }}
+                    >
+                      Numeric to Categorical
+                    </NavDropdown.Item>
+                  </DropdownSubmenu>
+
                   <DropdownSubmenu title="Rename">
                     <NavDropdown.Item>Sub 2</NavDropdown.Item>
                   </DropdownSubmenu>
@@ -212,7 +229,7 @@ const Menu = ({
             collapseOnSelect
             bg="dark"
             variant="dark"
-            style={{ height: "3vh" }}
+            style={{ height: "2.5vh", marginBottom: "1.2em" }}
           >
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
@@ -266,6 +283,7 @@ const Menu = ({
                       Replace with back fill
                     </NavDropdown.Item>
                   </DropdownSubmenu>
+
                   <DropdownSubmenu title="Treating Duplicates">
                     <NavDropdown.Item
                       onClick={() => {
@@ -275,7 +293,7 @@ const Menu = ({
                       Remove duplicates
                     </NavDropdown.Item>
                   </DropdownSubmenu>
-                  <DropdownSubmenu href="#action/3.7" title="Transformations">
+                  <DropdownSubmenu title="Transformations">
                     <NavDropdown.Item
                       onClick={() => {
                         handleSelect("normalize");
@@ -285,7 +303,7 @@ const Menu = ({
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("squared");
+                        handleSelect("transformer_squared");
                       }}
                     >
                       <var>
@@ -294,26 +312,27 @@ const Menu = ({
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("log");
+                        handleSelect("transformer_log");
                       }}
                     >
                       ln(x)
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("root2");
+                        handleSelect("transformer_root2");
                       }}
                     >
                       Square Root
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("");
+                        handleSelect("quartile_trimmer");
                       }}
                     >
                       Trim Quantiles
                     </NavDropdown.Item>
                   </DropdownSubmenu>
+
                   <DropdownSubmenu title="Treating Outliers">
                     <NavDropdown.Item
                       onClick={() => {
@@ -323,12 +342,28 @@ const Menu = ({
                       Remove outliers
                     </NavDropdown.Item>
                   </DropdownSubmenu>
-                  <DropdownSubmenu href="#action/3.7" title="Rename">
-                    <NavDropdown.Item href="#action/9.1">
-                      Sub 2
+
+                  <DropdownSubmenu title="Change Data Type">
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("change_data_type_to_date");
+                      }}
+                    >
+                      Numeric to Date
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("change_data_type_int_to_cat");
+                      }}
+                    >
+                      Numeric to Categorical
                     </NavDropdown.Item>
                   </DropdownSubmenu>
-                  <DropdownSubmenu href="#action/3.7" title="Find and Replace">
+
+                  <DropdownSubmenu title="Rename">
+                    <NavDropdown.Item>Sub 2</NavDropdown.Item>
+                  </DropdownSubmenu>
+                  <DropdownSubmenu title="Find and Replace">
                     <NavDropdown.Item
                       onClick={() => {
                         handleSelect("");
@@ -336,7 +371,6 @@ const Menu = ({
                     >
                       Sub 2
                     </NavDropdown.Item>
-                    onClick=
                     {() => {
                       handleSelect("");
                     }}
@@ -374,20 +408,6 @@ const Menu = ({
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("replace_na_mean");
-                      }}
-                    >
-                      Replace with mean
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => {
-                        handleSelect("replace_na_median");
-                      }}
-                    >
-                      Replace with median
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => {
                         handleSelect("replace_na_mode_numeric");
                       }}
                     >
@@ -408,6 +428,7 @@ const Menu = ({
                       Replace with back fill
                     </NavDropdown.Item>
                   </DropdownSubmenu>
+
                   <DropdownSubmenu title="Treating Duplicates">
                     <NavDropdown.Item
                       onClick={() => {
@@ -417,54 +438,34 @@ const Menu = ({
                       Remove duplicates
                     </NavDropdown.Item>
                   </DropdownSubmenu>
+
                   <DropdownSubmenu title="Transformations">
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("normalize");
+                        handleSelect("get_dummies");
                       }}
                     >
-                      Normalize
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => {
-                        handleSelect("squared");
-                      }}
-                    >
-                      <var>
-                        X<sup>2</sup>
-                      </var>
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => {
-                        handleSelect("log");
-                      }}
-                    >
-                      ln(x)
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => {
-                        handleSelect("root2");
-                      }}
-                    >
-                      Square Root
-                    </NavDropdown.Item>
-                    <NavDropdown.Item
-                      onClick={() => {
-                        handleSelect("");
-                      }}
-                    >
-                      Trim Quantiles
+                      Create Dummy Variable
                     </NavDropdown.Item>
                   </DropdownSubmenu>
-                  <DropdownSubmenu href="#action/3.7" title="Treating Outliers">
+                  <DropdownSubmenu href="#action/3.7" title="Change Data Type">
                     <NavDropdown.Item
                       onClick={() => {
-                        handleSelect("");
+                        handleSelect("change_data_type_to_date");
                       }}
                     >
-                      Remove outliers
+                      Categorical to Date
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Item
+                      onClick={() => {
+                        handleSelect("change_data_type_cat_to_int");
+                      }}
+                    >
+                      Categorical to Numeric
                     </NavDropdown.Item>
                   </DropdownSubmenu>
+
                   <DropdownSubmenu href="#action/3.7" title="Rename">
                     <NavDropdown.Item href="#action/9.1">
                       Sub 2
@@ -478,10 +479,6 @@ const Menu = ({
                     >
                       Sub 2
                     </NavDropdown.Item>
-                    onClick=
-                    {() => {
-                      handleSelect("");
-                    }}
                   </DropdownSubmenu>
                 </NavDropdownMenu>
               </Nav>
