@@ -83,7 +83,7 @@ def replace_na_categorical(df, col_name, stat):
     return df
 
 # """"Normalize Column"""
-def normalize_column(df, col_name):
+def normalize(df, col_name):
     app.logger.info('Normalize column %s', col_name)
     df_max_scaled = df.copy()
     df_max_scaled[col_name+"_normalized"] = df_max_scaled[col_name] /df_max_scaled[col_name].abs().max()
