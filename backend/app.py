@@ -430,7 +430,9 @@ def head_or_tail(file_name, direction, n):
     try:
         df = datastore.get_df(file_name)
         df = pandas_func.view_dataframe(df, direction, n)
-        return '\n' + df_to_json(df), 200
+        js = df_to_json(df)
+        app.logger.info('head or tail json' + js)
+        return '\n' + js, 200
     except FileNotFoundError:
         return '\n File not found ' + file_name, 404     
     except AttributeError:
@@ -438,7 +440,7 @@ def head_or_tail(file_name, direction, n):
 
 def df_to_json(df):
     li = []
-    li.append(json.loads(df.to_json(orient='records')))
+    li.append(json.loads(df.to_json(orient='records', date_format='iso')))
     li.append(pandas_func.addDataTypeToHeader(df))
     return json.dumps(li)
     # return json.dumps(json.loads(df.to_json(orient='records')))
