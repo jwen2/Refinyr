@@ -3,11 +3,23 @@ from pandas.testing import assert_frame_equal, assert_series_equal
 import pandas as pd
 import unittest
 import pandas_func
+import json
 
 app = Flask(__name__)
 
 def read_csv(filename):
     return pd.read_csv('../csv/' + filename)
+
+def df_to_json(df):
+    li = []
+    df['DisbursalDate'] = df['DisbursalDate'].dt.strftime('%Y-%m-%d')
+    df_to_json = df.to_json(orient='records', date_format='iso')
+    print(df_to_json)
+    json_loads_json = json.loads(df_to_json)
+    print(json.dumps(json_loads_json, indent=4, sort_keys=True))
+    li.append(json_loads_json)
+    li.append(pandas_func.addDataTypeToHeader(df))
+    return json.dumps(li)
 
 class TestPandas(unittest.TestCase):
 
@@ -111,5 +123,10 @@ class TestPandas(unittest.TestCase):
     def test_transformer(self):
         assert 1 == 0, "TODO"
 
+    def test_date(self):
+        dataframe = read_csv('test_files/datetest.csv')
+        actual_dataframe = pandas_func.change_data_type(dataframe, 'DisbursalDate', 'to_date')
+        df_to_json(actual_dataframe)
+        
 if __name__ == '__main__':
     unittest.main()
